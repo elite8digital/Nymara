@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ring from "@/assets/design.jpg";
+import ring from "@/assets/craft1.jpg";
 import CustomizeJewelryModal from "@/components/layout/CustomizeJewelryModal";
 
 const CraftMyVision = () => {
@@ -62,14 +62,14 @@ const CraftMyVision = () => {
         <div className="max-w-7xl w-full grid lg:grid-cols-2 gap-16 items-center">
           
           {/* LEFT - Image with footer title */}
-          <div className="flex flex-col justify-center items-center order-2 lg:order-1 text-center">
-            <h2 className="text-xl md:text-2xl text-gray-800 font-semibold cinzel tracking-wide mt-6">
+          <div className="flex flex-col gap-10 justify-center items-center order-2 lg:order-1 text-center">
+            <h2 className="text-2xl md:text-4xl text-gray-800 font-semibold cinzel tracking-wide -mt-4">
               Craft My Vision
             </h2>
             <img
               src={ring}
               alt="Craft My Vision"
-              className="w-full max-w-sm md:max-w-md mx-auto rounded-xl shadow-lg"
+              className="w-full max-w-sm md:max-w-[800px] mx-auto rounded-xl shadow-lg"
               style={{
                 objectFit: "contain",
                 backgroundColor: "transparent",
