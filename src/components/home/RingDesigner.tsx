@@ -79,7 +79,7 @@ const CraftMyVision = () => {
 
           {/* RIGHT - Steps + Button */}
           <div className="space-y-8 order-3">
-            <h2 className="text-2xl md:text-4xl font-semibold text-gray-800 cinzel">
+            <h2 className="text-xl md:text-2xl font-semibold text-gray-800 cinzel">
                 Three-Step Process
             </h2>
 
@@ -109,7 +109,7 @@ const CraftMyVision = () => {
 
                     <div className="flex-1 transition-all duration-500">
                       <h3
-                        className={`text:xl md:text-2xl font-bold mb-1 alta ${
+                        className={`text:xl md:text-xl font-bold mb-1 alta ${
                           activeStep === index
                             ? "text-gray-800"
                             : "text-gray-600"
