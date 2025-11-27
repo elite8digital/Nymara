@@ -63,7 +63,7 @@ const CraftMyVision = () => {
           
           {/* LEFT - Image with footer title */}
           <div className="flex flex-col gap-10 justify-center items-center order-2 lg:order-1 text-center">
-            <h2 className="text-2xl md:text-4xl text-gray-800 font-semibold cinzel tracking-wide -mt-4">
+            <h2 className="text-2xl md:text-4xl text-gray-800 font-semibold cinzel tracking-wide -mt-7">
               Craft My Vision
             </h2>
             <img
@@ -79,7 +79,7 @@ const CraftMyVision = () => {
 
           {/* RIGHT - Steps + Button */}
           <div className="space-y-8 order-3">
-            <h2 className="text-xl md:text-2xl font-semibold text-gray-800 alta">
+            <h2 className="text-2xl md:text-4xl font-semibold text-gray-800 cinzel">
                 Three-Step Process
             </h2>
 
@@ -109,7 +109,7 @@ const CraftMyVision = () => {
 
                     <div className="flex-1 transition-all duration-500">
                       <h3
-                        className={`text-lg font-bold mb-1 ${
+                        className={`text:xl md:text-2xl font-bold mb-1 alta ${
                           activeStep === index
                             ? "text-gray-800"
                             : "text-gray-600"
@@ -117,7 +117,7 @@ const CraftMyVision = () => {
                       >
                         Step {step.number} – {step.title}
                       </h3>
-                      <p className="text-gray-500 text-sm leading-relaxed">
+                      <p className="text-gray-500 text-sm leading-relaxed ">
                         {step.description}
                       </p>
                     </div>
@@ -126,7 +126,6 @@ const CraftMyVision = () => {
               ))}
             </div>
 
-            {/* Button - slightly right-aligned */}
              {/* Button - centered */}
 <div className="pt-4 flex justify-center">
   <button
