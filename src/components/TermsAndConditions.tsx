@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FileText, Shield, DollarSign, Package, Scale, ExternalLink, AlertTriangle, Gift, Tag } from 'lucide-react';
 
 export default function TermsAndConditions() {
-  const [expandedSection, setExpandedSection] = useState('use');
+const [expandedSection, setExpandedSection] = useState<string | null>('use');
 
   const sections = [
     { id: 'use', title: 'Use of Website', icon: FileText },
@@ -21,7 +21,7 @@ export default function TermsAndConditions() {
     { id: 'offers', title: 'Offer Terms', icon: Tag }
   ];
 
-  const toggleSection = (id) => {
+  const toggleSection = (id:string) => {
     setExpandedSection(expandedSection === id ? null : id);
   };
 
