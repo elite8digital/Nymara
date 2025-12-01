@@ -36,6 +36,7 @@ import guide from "@/assets/ring_size_guide.png";
 
 // import ProductReviews from '@/components/product/ProductReviews';
 import axios from "axios";
+import SizeGuide from "./SizeGuide";
 
 const VITE_API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -51,11 +52,16 @@ const getMetalColor = (metal: string) => {
 };
 
 const VARIANT_COLORS = {
-  "Yellow Gold": "bg-gradient-to-r from-yellow-500 via-yellow-300 to-yellow-600 shadow-inner",
-  "White Gold": "bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 shadow-inner",
-  "Rose Gold": "bg-gradient-to-r from-[#b76e79] via-pink-200 to-[#b76e79] shadow-inner",
-  "Silver": "bg-gradient-to-r from-gray-200 via-gray-100 to-gray-400 shadow-inner",
-  "Platinum": "bg-gradient-to-r from-gray-300 via-gray-400 to-gray-500 shadow-inner",
+  "Yellow Gold":
+    "bg-gradient-to-r from-yellow-500 via-yellow-300 to-yellow-600 shadow-inner",
+  "White Gold":
+    "bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 shadow-inner",
+  "Rose Gold":
+    "bg-gradient-to-r from-[#b76e79] via-pink-200 to-[#b76e79] shadow-inner",
+  Silver:
+    "bg-gradient-to-r from-gray-200 via-gray-100 to-gray-400 shadow-inner",
+  Platinum:
+    "bg-gradient-to-r from-gray-300 via-gray-400 to-gray-500 shadow-inner",
 };
 
 // simple luminance test for readable text color
@@ -181,8 +187,6 @@ const ProductDetail = () => {
     Boolean
   ); // remove undefined/null
 
- 
-
   // Standard customer-selectable sizes
   // Standard customer-selectable sizes
   const STANDARD_SIZES = [
@@ -200,8 +204,6 @@ const ProductDetail = () => {
     "9.5",
     "10",
   ];
-
-
 
   // Always use standard sizes for customers
   const sizeOptions = STANDARD_SIZES;
@@ -248,23 +250,22 @@ const ProductDetail = () => {
   type PriceResult = { amount: number; symbol: string };
 
   const calculatePrice = (): { amount: number; symbol: string } => {
-  const currency = selectedCountry.currency;
+    const currency = selectedCountry.currency;
 
-  if (product?.prices && product.prices[currency]) {
-    const { amount, symbol } = product.prices[currency];
+    if (product?.prices && product.prices[currency]) {
+      const { amount, symbol } = product.prices[currency];
+      return {
+        amount,
+        symbol: symbol || (currency === "INR" ? "₹" : "$"), // fallback
+      };
+    }
+
+    // Fallback to INR if no price found
     return {
-      amount,
-      symbol: symbol || (currency === "INR" ? "₹" : "$"), // fallback
+      amount: product?.price || 0,
+      symbol: currency === "INR" ? "₹" : "$",
     };
-  }
-
-  // Fallback to INR if no price found
-  return {
-    amount: product?.price || 0,
-    symbol: currency === "INR" ? "₹" : "$",
   };
-};
-
 
   const handleAddToCart = () => {
     // Require customer to pick a size
@@ -454,59 +455,59 @@ const ProductDetail = () => {
             </div>
 
             {product.variants && product.variants.length > 0 && (
-  <div>
-    <label className="block text-sm font-medium text-gray-900 mb-3">
-      Metal: {product.metalType || "Select"}
-    </label>
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-3">
+                  Metal: {product.metalType || "Select"}
+                </label>
 
-    <div className="grid grid-cols-2 gap-3">
-      {product.variants.map((variant, index) => {
-        const metal = (variant.metalType || "")
-          .replace("18K ", "")
-          .replace("14K ", "");
+                <div className="grid grid-cols-2 gap-3">
+                  {product.variants.map((variant, index) => {
+                    const metal = (variant.metalType || "")
+                      .replace("18K ", "")
+                      .replace("14K ", "");
 
-        const colorClass =
-          VARIANT_COLORS[metal as keyof typeof VARIANT_COLORS] ||
-          "bg-gray-200 shadow-inner";
+                    const colorClass =
+                      VARIANT_COLORS[metal as keyof typeof VARIANT_COLORS] ||
+                      "bg-gray-200 shadow-inner";
 
-        const isActive = product.metalType === variant.metalType;
+                    const isActive = product.metalType === variant.metalType;
 
-        return (
-          <button
-            key={index}
-           onClick={() => {
-  setProduct(prev => {
-    if (!prev) return prev;
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          setProduct((prev) => {
+                            if (!prev) return prev;
 
-    return {
-      ...prev,
-      metalType: variant.metalType,
-      coverImage: variant.coverImage || prev.coverImage,
-      images: variant.images && variant.images.length > 0
-        ? variant.images        // ONLY variant images
-        : prev.images           // fallback if variant has none
-    };
-  });
+                            return {
+                              ...prev,
+                              metalType: variant.metalType,
+                              coverImage: variant.coverImage || prev.coverImage,
+                              images:
+                                variant.images && variant.images.length > 0
+                                  ? variant.images // ONLY variant images
+                                  : prev.images, // fallback if variant has none
+                            };
+                          });
 
-  setActiveImageIndex(0);
-}}
-
-
-            className={`p-3 rounded-lg border-2 transition-all font-medium text-left flex items-center justify-between ${
-              isActive
-                ? "border-[#9a8457] bg-[#9a8457]/5 text-[#9a8457]"
-                : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"
-            }`}
-          >
-            <span className="text-sm">{metal}</span>
-            <div className={`w-6 h-6 rounded-full border ${colorClass}`}></div>
-          </button>
-        );
-      })}
-    </div>
-  </div>
-)}
-
+                          setActiveImageIndex(0);
+                        }}
+                        className={`p-3 rounded-lg border-2 transition-all font-medium text-left flex items-center justify-between ${
+                          isActive
+                            ? "border-[#9a8457] bg-[#9a8457]/5 text-[#9a8457]"
+                            : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"
+                        }`}
+                      >
+                        <span className="text-sm">{metal}</span>
+                        <div
+                          className={`w-6 h-6 rounded-full border ${colorClass}`}
+                        ></div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* Thumbnail images */}
             <div className="grid grid-cols-4 gap-4">
@@ -571,30 +572,34 @@ const ProductDetail = () => {
                 <div className="flex items-center space-x-3">
                   {/* Display current price */}
                   <span className="text-3xl font-bold text-gray-900">
-                    {symbol}{amount.toLocaleString()}
-
+                    {symbol}
+                    {amount.toLocaleString()}
                   </span>
 
                   {/* Show original price + discount ONLY for INR */}
                   {selectedCountry.currency === "INR" &&
-  (product.originalPrice ?? 0) > (product.price ?? 0) && (
-    <span className="text-xl text-gray-500 line-through">
-      ₹{(product.originalPrice ?? 0).toLocaleString()}
-    </span>
-  )}
+                    (product.originalPrice ?? 0) > (product.price ?? 0) && (
+                      <span className="text-xl text-gray-500 line-through">
+                        ₹{(product.originalPrice ?? 0).toLocaleString()}
+                      </span>
+                    )}
 
                   {/* 💰 Making Charges by Country */}
                   {product.makingChargesByCountry &&
-    product.makingChargesByCountry[selectedCountry.currency] && (
-      <div className="mt-2 text-sm text-gray-700">
-        <span className="font-medium">Making Charges:</span>{" "}
-        {
-          product.makingChargesByCountry[selectedCountry.currency].symbol ||
-          (selectedCountry.currency === "INR" ? "₹" : "$")
-        }
-        {product.makingChargesByCountry[selectedCountry.currency].amount.toLocaleString()}
-      </div>
-    )}
+                    product.makingChargesByCountry[
+                      selectedCountry.currency
+                    ] && (
+                      <div className="mt-2 text-sm text-gray-700">
+                        <span className="font-medium">Making Charges:</span>{" "}
+                        {product.makingChargesByCountry[
+                          selectedCountry.currency
+                        ].symbol ||
+                          (selectedCountry.currency === "INR" ? "₹" : "$")}
+                        {product.makingChargesByCountry[
+                          selectedCountry.currency
+                        ].amount.toLocaleString()}
+                      </div>
+                    )}
 
                   {selectedCountry.currency === "INR" &&
                     (product.discount ?? 0) > 0 && (
@@ -1088,78 +1093,15 @@ const ProductDetail = () => {
 
         {/* Size Guide Modal */}
         {showSizeGuide && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
-    <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
-      {/* Header */}
-      <div className="flex justify-between items-center px-6 py-5 border-b border-gray-200">
-        <h3 className="text-2xl font-semibold text-gray-900">Ring Size Guide</h3>
-        <button
-          onClick={() => setShowSizeGuide(false)}
-          className="text-gray-400 hover:text-gray-600 text-3xl leading-none transition-colors"
-        >
-          ×
-        </button>
-      </div>
-      
-      {/* Scrollable Content */}
-      <div className="overflow-y-auto px-6 py-6">
-        <div className="space-y-6">
-          <p className="text-gray-700">
-            Find your perfect ring size using one of these methods:
-          </p>
-          
-          {/* Size Chart Section */}
-          <div>
-            <h4 className="text-lg font-semibold text-gray-900 mb-4">
-              Size Chart (Inner Circumference):
-            </h4>
-            <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-              <img 
-                src={guide} 
-                alt="Ring Size Conversion Chart" 
-                className="w-full h-auto"
-              />
-            </div>
-          </div>
-          
-          {/* Measuring Tips Section */}
-          <div>
-            <h4 className="text-lg font-semibold text-gray-900 mb-3">
-              Measuring Tips:
-            </h4>
-            <ul className="space-y-2 text-gray-700">
-              <li className="flex items-start">
-                <span className="mr-2">•</span>
-                <span>Measure your finger at the end of the day</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2">•</span>
-                <span>Consider the width of the band</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2">•</span>
-                <span>Account for seasonal finger size changes</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2">•</span>
-                <span>When in doubt, size up rather than down</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      
-      {/* Footer Button */}
-      <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
-        <button
-          onClick={() => setShowSizeGuide(false)}
-          className="w-full bg-[#9a8457] text-white py-3 rounded-lg hover:bg-[#8a7547] transition-colors font-medium text-base"
-        >
-          Got it
-        </button>
-      </div>
-    </div>
-  </div>
+  <SizeGuide
+    isOpen={showSizeGuide}
+    onClose={() => setShowSizeGuide(false)}
+    productType={
+      Array.isArray(product.category) 
+        ? product.category[0] 
+        : product.category
+    }
+  />
 )}
         {/* Share Modal */}
         {showShareModal && (
@@ -1220,21 +1162,25 @@ const ProductDetail = () => {
               </div>
               <div className="space-y-4">
                 <p className="text-sm text-gray-600">
-                  Tell us the query about the size or any other concern you have regarding this product. We will get back to you as soon as possible.
+                  Tell us the query about the size or any other concern you have
+                  regarding this product. We will get back to you as soon as
+                  possible.
                 </p>
-                
+
                 {/* Product Preview */}
                 <div className="bg-gray-50 p-3 rounded-lg flex items-center space-x-3">
-                  <img 
-                    src={product.coverImage} 
+                  <img
+                    src={product.coverImage}
                     alt={product.name}
                     className="w-16 h-16 object-cover rounded"
                   />
                   <div className="flex-1">
-                    <div className="font-medium text-sm text-gray-900">{product.name}</div>
+                    <div className="font-medium text-sm text-gray-900">
+                      {product.name}
+                    </div>
                     <div className="text-sm text-gray-600">
-                    {symbol}{amount.toLocaleString()}
-
+                      {symbol}
+                      {amount.toLocaleString()}
                     </div>
                   </div>
                 </div>
@@ -1276,51 +1222,57 @@ const ProductDetail = () => {
 
                 {/* Action Buttons */}
                 <div className="flex space-x-3">
-                 {/* Action Buttons */}
-<div className="flex space-x-3">
-  <button
-    onClick={async () => {
-      try {
-        // Send query email via backend API
-        await axios.post(`${VITE_API_URL}/api/contact/query`, {
-          name: "", // optional — can later pull from logged-in user
-          email: "support@nymara.com", // or replace with user's email if logged in
-          size: hintSize,
-          message: hintMessage,
-          productId: product._id,
-          productName: product.name,
-          productUrl: window.location.href,
-        });
+                  {/* Action Buttons */}
+                  <div className="flex space-x-3">
+                    <button
+                      onClick={async () => {
+                        try {
+                          // Send query email via backend API
+                          await axios.post(
+                            `${VITE_API_URL}/api/contact/query`,
+                            {
+                              name: "", // optional — can later pull from logged-in user
+                              email: "support@nymara.com", // or replace with user's email if logged in
+                              size: hintSize,
+                              message: hintMessage,
+                              productId: product._id,
+                              productName: product.name,
+                              productUrl: window.location.href,
+                            }
+                          );
 
-        alert("✅ Your query has been sent successfully! We’ll get back to you soon.");
-        setShowDropHintModal(false);
-        setHintSize("");
-        setHintMessage("");
-      } catch (err) {
-        console.error("❌ Error sending query:", err);
-        alert("Failed to send query. Please try again later.");
-      }
-    }}
-    className="flex-1 bg-[#9a8457] text-white py-3 px-4 rounded-lg hover:bg-[#8a7547] transition-colors font-medium"
-  >
-    Send Query
-  </button>
+                          alert(
+                            "✅ Your query has been sent successfully! We’ll get back to you soon."
+                          );
+                          setShowDropHintModal(false);
+                          setHintSize("");
+                          setHintMessage("");
+                        } catch (err) {
+                          console.error("❌ Error sending query:", err);
+                          alert(
+                            "Failed to send query. Please try again later."
+                          );
+                        }
+                      }}
+                      className="flex-1 bg-[#9a8457] text-white py-3 px-4 rounded-lg hover:bg-[#8a7547] transition-colors font-medium"
+                    >
+                      Send Query
+                    </button>
 
-  <button
-    onClick={() => {
-      const hintText = `Product: ${product.name}\nLink: ${window.location.href}${hintSize ? `\nSize: ${hintSize}` : ""}${hintMessage ? `\nNotes: ${hintMessage}` : ""}`;
-      navigator.clipboard.writeText(hintText);
-      alert("Hint details copied to clipboard!");
-      setShowDropHintModal(false);
-      setHintSize("");
-      setHintMessage("");
-    }}
-    className="flex-1 bg-gray-600 text-white py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors font-medium"
-  >
-    Copy Details
-  </button>
-</div>
-
+                    <button
+                      onClick={() => {
+                        const hintText = `Product: ${product.name}\nLink: ${window.location.href}${hintSize ? `\nSize: ${hintSize}` : ""}${hintMessage ? `\nNotes: ${hintMessage}` : ""}`;
+                        navigator.clipboard.writeText(hintText);
+                        alert("Hint details copied to clipboard!");
+                        setShowDropHintModal(false);
+                        setHintSize("");
+                        setHintMessage("");
+                      }}
+                      className="flex-1 bg-gray-600 text-white py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors font-medium"
+                    >
+                      Copy Details
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1330,6 +1282,5 @@ const ProductDetail = () => {
     </div>
   );
 };
-
 
 export default ProductDetail;

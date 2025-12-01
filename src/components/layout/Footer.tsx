@@ -87,20 +87,20 @@ export default function Footer() {
           <div className="space-y-4">
             <h4 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">Customer Service</h4>
             <div className="space-y-2">
-              <a href="#shipping-policy" className="block text-gray-400 text-sm hover:text-[#9a8457] transition-colors">
+              <a href="/shippingpolicy" className="block text-gray-400 text-sm hover:text-[#9a8457] transition-colors">
                 Shipping Policy
               </a>
-              <a href="#15-day-return" className="block text-gray-400 text-sm hover:text-[#9a8457] transition-colors">
+              <a href="/returnpolicy" className="block text-gray-400 text-sm hover:text-[#9a8457] transition-colors">
                 15 Day Return Policy
               </a>
-              <a href="#lifetime-buyback" className="block text-gray-400 text-sm hover:text-[#9a8457] transition-colors">
+              <a href="/buyback" className="block text-gray-400 text-sm hover:text-[#9a8457] transition-colors">
                 Lifetime Buy-Back Policy
               </a>
-              <a href="#lifetime-warranty" className="block text-gray-400 text-sm hover:text-[#9a8457] transition-colors">
+              <a href="/warrantypolicy" className="block text-gray-400 text-sm hover:text-[#9a8457] transition-colors">
                 Lifetime Warranty
               </a>
-              <a href="#virtual-appointment" className="block text-gray-400 text-sm hover:text-[#9a8457] transition-colors">
-                Virtual Appointment
+              <a href="/termsandconditions" className="block text-gray-400 text-sm hover:text-[#9a8457] transition-colors">
+                Terms and Conditions
               </a>
               <a href="#track-order" className="block text-gray-400 text-sm hover:text-[#9a8457] transition-colors">
                 Track Your Order

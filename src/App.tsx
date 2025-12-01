@@ -20,11 +20,14 @@ import NecklaceSizeGuide from "./pages/NecklaceSizeGuide";
 import RingSizeGuide from "./pages/RingSizeGuide";
 import CorporateGifting from "./pages/CorporateGifting";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
-import { CurrencyProvider } from "@/contexts/CurrencyContext";
-import axios from "axios";
 import ContactUs from "./pages/ContactUs";
 import FranchiseOpportunity from "./pages/FranchiseOpportunity";
 import { TrackingProvider } from "./contexts/TrackingContext";
+import BuyBackPolicy from "./components/BuyBackPolicy";
+import ReturnPolicy from "./components/ReturnPolicy";
+import ShippingPolicy from "./components/ShippingPolicy";
+import TermsAndConditions from "./components/TermsAndConditions";
+import WarrantyPolicy from "./components/WarrantyPolicy";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -45,14 +48,14 @@ const ChatbotButton = () => {
   };
 
   // Generate a sessionId for guests if not present
-  const getOrCreateSessionId = () => {
-    let sessionId = localStorage.getItem("sessionId");
-    if (!sessionId) {
-      sessionId = "sess_" + Math.random().toString(36).substring(2, 12);
-      localStorage.setItem("sessionId", sessionId);
-    }
-    return sessionId;
-  };
+  // const getOrCreateSessionId = () => {
+  //   let sessionId = localStorage.getItem("sessionId");
+  //   if (!sessionId) {
+  //     sessionId = "sess_" + Math.random().toString(36).substring(2, 12);
+  //     localStorage.setItem("sessionId", sessionId);
+  //   }
+  //   return sessionId;
+  // };
 
   const sendMessage = async () => {
     if (inputText.trim()) {
@@ -410,6 +413,12 @@ function App() {
               <Route path="/education" element={<EducationPage />} />
               <Route path="/favorites" element={<FavoritesPage />} />
               <Route path="/cart" element={<CartPage />} />
+              <Route path="/buyback" element={<BuyBackPolicy />} />
+              <Route path="/returnpolicy" element={<ReturnPolicy />} />
+              <Route path="/shippingpolicy" element={<ShippingPolicy />} />
+              <Route path="/termsandconditions" element={<TermsAndConditions />} />
+              <Route path="/warrantypolicy" element={<WarrantyPolicy />} />
+
               <Route
                 path="/login"
                 element={
