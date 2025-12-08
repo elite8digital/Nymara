@@ -418,6 +418,7 @@ function App() {
               <Route path="/shippingpolicy" element={<ShippingPolicy />} />
               <Route path="/termsandconditions" element={<TermsAndConditions />} />
               <Route path="/warrantypolicy" element={<WarrantyPolicy />} />
+              
 
               <Route
                 path="/login"

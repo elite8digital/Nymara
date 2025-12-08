@@ -7,7 +7,7 @@ interface ActiveFilters {
   stoneType: string[];
   style: string[];
   size: string[];
-    gender: string[]; 
+  gender: string[];
   color: string[];
   category: string[];
   sortBy: string;
@@ -18,7 +18,7 @@ interface FilterOptions {
   stoneType: string[];
   style: string[];
   size: string[];
-    gender: string[]; 
+  gender: string[];
   color: string[];
   category: string[];
   sortBy: Array<{
@@ -41,26 +41,26 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   filterOptions
 }) => {
   const clearAllFilters = () => {
-  setActiveFilters({
-    metalType: [],
-    stoneType: [],
-    style: [],
-    size: [],
-    color: [],
-    category: [],
-    gender: [],  
-    sortBy: "best-seller"
-  });
-};
+    setActiveFilters({
+      metalType: [],
+      stoneType: [],
+      style: [],
+      size: [],
+      color: [],
+      category: [],
+      gender: [],
+      sortBy: "best-seller"
+    });
+  };
 
   const toggleFilter = (category: keyof ActiveFilters, value: string) => {
     if (category === 'sortBy') return;
-    
+
     const currentFilters = activeFilters[category] as string[];
     const newFilters = currentFilters.includes(value)
       ? currentFilters.filter(item => item !== value)
       : [...currentFilters, value];
-    
+
     setActiveFilters({
       ...activeFilters,
       [category]: newFilters
@@ -84,11 +84,10 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                   checked={activeFilters.category.includes(category)}
                   onChange={() => toggleFilter('category', category)}
                 />
-                <div className={`w-4 h-4 bg-white border-2 rounded mr-3 transition-colors relative ${
-                  activeFilters.category.includes(category) 
-                    ? 'border-[#9a8457]' 
+                <div className={`w-4 h-4 bg-white border-2 rounded mr-3 transition-colors relative ${activeFilters.category.includes(category)
+                    ? 'border-[#9a8457]'
                     : 'border-slate-300 group-hover:border-[#9a8457]'
-                }`}>
+                  }`}>
                   {activeFilters.category.includes(category) && (
                     <div className="absolute inset-0.5 bg-[#9a8457] rounded-sm"></div>
                   )}
@@ -102,33 +101,37 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
         </div>
 
         {/* Metal Type */}
-        <div>
-          <h4 className="font-medium text-slate-800 mb-3">Metal Type</h4>
-          <div className="space-y-2">
-            {filterOptions.metalType.map(metal => (
-              <label key={metal} className="flex items-center cursor-pointer group">
-                <input
-                  type="checkbox"
-                  className="sr-only"
-                  checked={activeFilters.metalType.includes(metal)}
-                  onChange={() => toggleFilter('metalType', metal)}
-                />
-                <div className={`w-4 h-4 bg-white border-2 rounded mr-3 transition-colors relative ${
-                  activeFilters.metalType.includes(metal) 
-                    ? 'border-[#9a8457]' 
-                    : 'border-slate-300 group-hover:border-[#9a8457]'
-                }`}>
-                  {activeFilters.metalType.includes(metal) && (
-                    <div className="absolute inset-0.5 bg-[#9a8457] rounded-sm"></div>
-                  )}
-                </div>
-                <span className="text-sm text-slate-700 group-hover:text-[#9a8457] transition-colors">
-                  {metal}
-                </span>
-              </label>
-            ))}
-          </div>
+      <div>
+  <h4 className="font-medium text-slate-800 mb-3">Metal Type</h4>
+  <div className="space-y-2">
+    {filterOptions.metalType.map(metal => (
+      <label key={metal} className="flex items-center cursor-pointer group">
+        <input
+          type="checkbox"
+          className="sr-only"
+          checked={activeFilters.metalType.includes(metal)}
+          onChange={() => toggleFilter("metalType", metal)}
+        />
+        <div
+          className={`w-4 h-4 bg-white border-2 rounded mr-3 transition-colors relative ${
+            activeFilters.metalType.includes(metal)
+              ? "border-[#9a8457]"
+              : "border-slate-300 group-hover:border-[#9a8457]"
+          }`}
+        >
+          {activeFilters.metalType.includes(metal) && (
+            <div className="absolute inset-0.5 bg-[#9a8457] rounded-sm"></div>
+          )}
         </div>
+        <span className="text-sm text-slate-700 group-hover:text-[#9a8457] transition-colors">
+          {metal}
+        </span>
+      </label>
+    ))}
+  </div>
+</div>
+
+
 
         {/* Stone Type */}
         <div>
@@ -142,11 +145,10 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                   checked={activeFilters.stoneType.includes(stone)}
                   onChange={() => toggleFilter('stoneType', stone)}
                 />
-                <div className={`w-4 h-4 bg-white border-2 rounded mr-3 transition-colors relative ${
-                  activeFilters.stoneType.includes(stone) 
-                    ? 'border-[#9a8457]' 
+                <div className={`w-4 h-4 bg-white border-2 rounded mr-3 transition-colors relative ${activeFilters.stoneType.includes(stone)
+                    ? 'border-[#9a8457]'
                     : 'border-slate-300 group-hover:border-[#9a8457]'
-                }`}>
+                  }`}>
                   {activeFilters.stoneType.includes(stone) && (
                     <div className="absolute inset-0.5 bg-[#9a8457] rounded-sm"></div>
                   )}
@@ -171,11 +173,10 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                   checked={activeFilters.style.includes(style)}
                   onChange={() => toggleFilter('style', style)}
                 />
-                <div className={`w-4 h-4 bg-white border-2 rounded mr-3 transition-colors relative ${
-                  activeFilters.style.includes(style) 
-                    ? 'border-[#9a8457]' 
+                <div className={`w-4 h-4 bg-white border-2 rounded mr-3 transition-colors relative ${activeFilters.style.includes(style)
+                    ? 'border-[#9a8457]'
                     : 'border-slate-300 group-hover:border-[#9a8457]'
-                }`}>
+                  }`}>
                   {activeFilters.style.includes(style) && (
                     <div className="absolute inset-0.5 bg-[#9a8457] rounded-sm"></div>
                   )}
@@ -195,11 +196,10 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             {filterOptions.size.map(size => (
               <button
                 key={size}
-                className={`p-2 text-sm rounded-lg border transition-all duration-300 ${
-                  activeFilters.size.includes(size)
+                className={`p-2 text-sm rounded-lg border transition-all duration-300 ${activeFilters.size.includes(size)
                     ? "bg-[#9a8457] text-white border-[#9a8457]"
                     : "bg-white text-slate-700 border-slate-200 hover:border-[#9a8457] hover:text-[#9a8457]"
-                }`}
+                  }`}
                 onClick={() => toggleFilter('size', size)}
               >
                 {size}
@@ -223,11 +223,10 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                   onChange={() => toggleFilter("gender", genderOption)}
                 />
                 <div
-                  className={`w-4 h-4 bg-white border-2 rounded mr-3 transition-colors relative ${
-                    activeFilters.gender.includes(genderOption)
+                  className={`w-4 h-4 bg-white border-2 rounded mr-3 transition-colors relative ${activeFilters.gender.includes(genderOption)
                       ? "border-[#9a8457]"
                       : "border-slate-300 group-hover:border-[#9a8457]"
-                  }`}
+                    }`}
                 >
                   {activeFilters.gender.includes(genderOption) && (
                     <div className="absolute inset-0.5 bg-[#9a8457] rounded-sm"></div>

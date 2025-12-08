@@ -29,24 +29,66 @@ const ProductCategoryPage: React.FC = () => {
   } = useProducts();
 
   // Set filters by category - FIXED VERSION
-  useEffect(() => {
-    if (category) {
-      // Reset filters and set only the category from URL
-      setFilters({
-        metalType: [],
-        stoneType: [],
-        style: [],
-        size: [],
-        color: [],
-        gender: [],
-        category: [category],  // Only set the current category
-        sortBy: filters.sortBy || "best-seller"  // Preserve sort order
-      });
-    } else {
-      // If no category in URL, reset to show all products
-      resetFilters();
-    }
-  }, [category]); // Only depend on category changes
+  // useEffect(() => {
+  //   if (category) {
+  //     // Reset filters and set only the category from URL
+  //     setFilters({
+  //       metalType: [],
+  //       stoneType: [],
+  //       style: [],
+  //       size: [],
+  //       color: [],
+  //       gender: [],
+  //       category: [category],  // Only set the current category
+  //       sortBy: filters.sortBy || "best-seller"  // Preserve sort order
+  //     });
+  //   } else {
+  //     // If no category in URL, reset to show all products
+  //     resetFilters();
+  //   }
+  // }, [category]); // Only depend on category changes
+
+//   useEffect(() => {
+//   if (category) {
+//     setFilters({
+//       metalType: ["18K Gold"],  // 🟢 default selected filter
+//       stoneType: [],
+//       style: [],
+//       size: [],
+//       color: [],
+//       gender: [],
+//       category: [category],
+//       sortBy: filters.sortBy || "best-seller"
+//     });
+//   } else {
+//     resetFilters();
+//     setFilters({
+//       metalType: ["18K Gold"], // 🟢 force default when no category too
+//     });
+//   }
+// }, [category]);
+
+useEffect(() => {
+  if (category) {
+    setFilters({
+      ...filters,
+      category: [category],
+
+      // Only set default if user has not selected a metal yet
+      metalType: filters.metalType.length > 0 ? filters.metalType : ["18K Gold"],
+
+      sortBy: filters.sortBy || "best-seller",
+    });
+  } else {
+    resetFilters();
+    setFilters({
+      ...filters,
+      metalType: ["18K Gold"],   // force default on no category
+    });
+  }
+}, [category]);
+
+
 
   // Mark page loaded
   useEffect(() => {
@@ -102,14 +144,18 @@ const ProductCategoryPage: React.FC = () => {
 
   // Filter options
   const filterOptions = {
-    metalType: [
-      "18K White Gold",
-      "18K Yellow Gold",
-      "18K Rose Gold",
-      "Platinum",
-      "Sterling Silver",
-      "14K Yellow Gold",
-    ],
+  metalType: [
+  "18K Gold",
+  "18K White Gold",
+  "18K Rose Gold",
+  "14K Gold",
+  "14K White Gold",
+  "14K Rose Gold",
+  "Platinum",
+  "925 Sterling Silver",
+  "Gold Vermeil",
+],
+
     stoneType: [
       "Lab-Grown Diamond",
       "Lab-Grown Sapphire",

@@ -105,6 +105,7 @@ const SizeGuide: React.FC<SizeGuideProps> = ({
 
     const type = productType.toLowerCase();
 
+    if (type.includes("earring")) return []; 
     if (type.includes("ring")) return ["ring"];
     if (type.includes("necklace") || type.includes("chain"))
       return ["necklace"];

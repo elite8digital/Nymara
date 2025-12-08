@@ -88,7 +88,7 @@ const HeaderActions = () => {
   const { cartCount } = useCart();
   const { wishlistCount } = useWishlist();
   const { isLoggedIn, user, logout } = useAuth();
-  const { setSearchQuery: setGlobalSearchQuery, setFilters, resetFilters } = useProducts();
+  const { filters,setSearchQuery: setGlobalSearchQuery, setFilters, resetFilters } = useProducts();
 
   // Close dropdowns when clicking outside
   // Close dropdowns when clicking outside
@@ -129,22 +129,42 @@ useEffect(() => {
 };
 
 
+  // const handleSearch = () => {
+  //   if (searchQuery.trim()) {
+  //     // Reset filters to show all relevant results
+  //     resetFilters();
+      
+  //     // Set search query
+  //     setGlobalSearchQuery(searchQuery);
+      
+  //     // Navigate to products page
+  //     navigate('/products');
+      
+  //     // Close search dropdown
+  //     setIsSearchOpen(false);
+  //     setSearchQuery('');
+  //   }
+  // };
+
   const handleSearch = () => {
-    if (searchQuery.trim()) {
-      // Reset filters to show all relevant results
-      resetFilters();
-      
-      // Set search query
-      setGlobalSearchQuery(searchQuery);
-      
-      // Navigate to products page
-      navigate('/products');
-      
-      // Close search dropdown
-      setIsSearchOpen(false);
-      setSearchQuery('');
-    }
-  };
+  if (searchQuery.trim()) {
+    resetFilters();
+
+
+
+    // Always keep 18K Gold as default filter
+    setFilters({ metalType: ["18K Gold"] });
+
+    // Set search query
+    setGlobalSearchQuery(searchQuery);
+
+    navigate('/products');
+
+    setIsSearchOpen(false);
+    setSearchQuery('');
+  }
+};
+
 
 const handleSearchKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -169,21 +189,37 @@ const handleSearchKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
 const handleCategorySearchClick = (category: string, searchTerm: string) => {
     // Reset filters first
     resetFilters();
+    setFilters({ metalType: ["18K Gold"] });
+
     
-    // Set both category filter and search term
+    // // Set both category filter and search term
+    // setTimeout(() => {
+    //   setFilters({
+    //     category: [category],
+    //     metalType: ["18K Gold"],
+    //     stoneType: [],
+    //     style: [],
+    //     size: [],
+    //     color: [],
+    //     sortBy: 'best-seller'
+    //   });
+    //   setGlobalSearchQuery(searchTerm);
+    // }, 100);
     setTimeout(() => {
-      setFilters({
-        category: [category],
-        metalType: [],
-        stoneType: [],
-        style: [],
-        size: [],
-        color: [],
-        sortBy: 'best-seller'
-      });
-      setGlobalSearchQuery(searchTerm);
-    }, 100);
-    
+  setFilters({
+    ...filters,                  // keep all previous filters
+    category: [category],
+    metalType: ["18K Gold"],     // always force this one
+    stoneType: [],
+    style: [],
+    size: [],
+    color: [],
+    sortBy: "best-seller",
+  });
+
+  setGlobalSearchQuery(searchTerm);
+}, 100);
+
     // Navigate to products page
     navigate('/products');
     

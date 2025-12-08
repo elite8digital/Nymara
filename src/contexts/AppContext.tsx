@@ -9,6 +9,11 @@ export interface Product {
   sku?: string; 
   name: string;
   description?: string;
+  metal?: {
+  metalType?: string;
+  purity?: string;
+  weight?: number;
+};
   price: number;
   originalPrice?: number;
   discount?: number;
@@ -49,17 +54,56 @@ export interface Product {
   diamondDetails?: Record<string, string | number>;
   sideDiamondDetails?: Record<string, string | number>;
 
-    variants?: {
-  color?: string;
-  metalType?: string;
-  size?: string;
-  price?: number;
-  coverImage?: string;
-  images?: string[];
-  videoUrl?: string;
-  model3D?: string;
-  isDefault?: boolean;
-}[];
+  currency?: string;  
+
+goldTotal?: number;
+mainDiamondTotal?: number;
+sideDiamondTotal?: number;
+gemstonesTotal?: number;
+
+basePrice?: number;
+
+displayPrice?: number;
+convertedMakingCharge?: number;
+totalConvertedPrice?: number;
+
+//     variants?: {
+//   color?: string;
+//   metalType?: string;
+//   size?: string;
+//   price?: number;
+//   coverImage?: string;
+//   images?: string[];
+//   videoUrl?: string;
+//   model3D?: string;
+//   isDefault?: boolean;
+// }[];
+
+variants?: Array<{
+    _id: string;
+
+    metal?: {
+      metalType?: string;
+      purity?: string;
+      weight?: number;
+    };
+
+    metalType?: string;
+
+    coverImage?: string;
+    images?: string[];
+    videoUrl?: string;
+    model3D?: string;
+
+    price?: number;
+    displayPrice?: number;
+    convertedMakingCharge?: number;
+    totalConvertedPrice?: number;
+    originalPrice?: number;
+    discount?: number;
+
+    stock?: number;
+  }>;
 
   variantLinks?: {
     [metalType: string]: string;
@@ -287,7 +331,7 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
         ...state,
         searchQuery: '',
         filters: {
-          metalType: [],
+          metalType: ["18K Gold"],
           stoneType: [],
           style: [],
           size: [],
@@ -458,13 +502,30 @@ export const useProducts = () => {
     }
 
     // Filter by metal type
-    if (state.filters.metalType.length > 0) {
-      filtered = filtered.filter((product: any) =>
-        state.filters.metalType.some(metal => 
-          product.metalType?.toLowerCase() === metal.toLowerCase()
-        )
-      );
-    }
+   // Filter by metal type (works with backend structure)
+// Metal filtering
+if (state.filters.metalType.length > 0) {
+  // If user manually chooses metals → use their selection
+  filtered = filtered.filter((product: any) => {
+    const productMetal = product?.metal?.metalType?.toLowerCase() || "";
+    return state.filters.metalType.some(metal =>
+      productMetal === metal.toLowerCase()
+    );
+  });
+
+} else {
+  // 🟡 DEFAULT FILTER: Only show pure Yellow Gold
+  filtered = filtered.filter((product: any) => {
+    const productMetal = product?.metal?.metalType || "";
+
+    return (
+      productMetal === "18K Gold" ||
+      productMetal === "14K Gold"
+    );
+  });
+}
+
+
 
     // Filter by stone type
     if (state.filters.stoneType.length > 0) {
