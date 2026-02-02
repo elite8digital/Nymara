@@ -17,6 +17,7 @@ const ProductCategoryPage: React.FC = () => {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
 
   const {
     filteredProducts,
@@ -28,72 +29,43 @@ const ProductCategoryPage: React.FC = () => {
     getCategories,
   } = useProducts();
 
-  // Set filters by category - FIXED VERSION
-  // useEffect(() => {
-  //   if (category) {
-  //     // Reset filters and set only the category from URL
-  //     setFilters({
-  //       metalType: [],
-  //       stoneType: [],
-  //       style: [],
-  //       size: [],
-  //       color: [],
-  //       gender: [],
-  //       category: [category],  // Only set the current category
-  //       sortBy: filters.sortBy || "best-seller"  // Preserve sort order
-  //     });
-  //   } else {
-  //     // If no category in URL, reset to show all products
-  //     resetFilters();
-  //   }
-  // }, [category]); // Only depend on category changes
+  // Set filters by category
+  useEffect(() => {
+    if (category) {
+      setFilters({
+        ...filters,
+        category: [category],
+        // Only set default if user has not selected a metal yet
+        metalType: filters.metalType.length > 0 ? filters.metalType : ["18K Gold"],
+        sortBy: filters.sortBy || "best-seller",
+      });
+    } else {
+      resetFilters();
+      setFilters({
+        ...filters,
+        metalType: ["18K Gold"],   // force default on no category
+      });
+    }
+  }, [category]);
 
-//   useEffect(() => {
-//   if (category) {
-//     setFilters({
-//       metalType: ["18K Gold"],  // 🟢 default selected filter
-//       stoneType: [],
-//       style: [],
-//       size: [],
-//       color: [],
-//       gender: [],
-//       category: [category],
-//       sortBy: filters.sortBy || "best-seller"
-//     });
-//   } else {
-//     resetFilters();
-//     setFilters({
-//       metalType: ["18K Gold"], // 🟢 force default when no category too
-//     });
-//   }
-// }, [category]);
-
-useEffect(() => {
-  if (category) {
-    setFilters({
-      ...filters,
-      category: [category],
-
-      // Only set default if user has not selected a metal yet
-      metalType: filters.metalType.length > 0 ? filters.metalType : ["18K Gold"],
-
-      sortBy: filters.sortBy || "best-seller",
-    });
-  } else {
-    resetFilters();
-    setFilters({
-      ...filters,
-      metalType: ["18K Gold"],   // force default on no category
-    });
-  }
-}, [category]);
-
-
-
-  // Mark page loaded
+  // Mark page loaded after initial render
   useEffect(() => {
     setIsLoaded(true);
+    // Simulate loading products (adjust timing as needed)
+    const timer = setTimeout(() => {
+      setIsLoadingProducts(false);
+    }, 500);
+    return () => clearTimeout(timer);
   }, []);
+
+  // Set loading state when filters change
+  useEffect(() => {
+    setIsLoadingProducts(true);
+    const timer = setTimeout(() => {
+      setIsLoadingProducts(false);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [filters, searchQuery]);
 
   // Reset to page 1 when filters change
   useEffect(() => {
@@ -144,18 +116,17 @@ useEffect(() => {
 
   // Filter options
   const filterOptions = {
-  metalType: [
-  "18K Gold",
-  "18K White Gold",
-  "18K Rose Gold",
-  "14K Gold",
-  "14K White Gold",
-  "14K Rose Gold",
-  "Platinum",
-  "925 Sterling Silver",
-  "Gold Vermeil",
-],
-
+    metalType: [
+      "18K Gold",
+      "18K White Gold",
+      "18K Rose Gold",
+      "14K Gold",
+      "14K White Gold",
+      "14K Rose Gold",
+      "Platinum",
+      "925 Sterling Silver",
+      "Gold Vermeil",
+    ],
     stoneType: [
       "Lab-Grown Diamond",
       "Lab-Grown Sapphire",
@@ -328,10 +299,13 @@ useEffect(() => {
 
       {/* Products Section */}
       <div className="max-w-7xl mx-auto px-8 pb-20">
-        {filteredProducts.length > 0 ? (
+        {/* Show loader or products */}
+        {isLoadingProducts ? (
+          <ProductGrid products={[]} viewMode={viewMode} isLoading={true} />
+        ) : filteredProducts.length > 0 ? (
           <>
             {/* Product Grid with pagination */}
-            <ProductGrid products={currentProducts} viewMode={viewMode} />
+            <ProductGrid products={currentProducts} viewMode={viewMode} isLoading={false} />
 
             {/* Pagination */}
             {totalPages > 1 && (

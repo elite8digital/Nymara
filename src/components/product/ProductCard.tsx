@@ -6,32 +6,70 @@ import { Product, useCart, useWishlist } from "@/contexts/AppContext";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { useTracking } from "@/contexts/TrackingContext";
 
-
-
 interface ProductCardProps {
   product: Product;
   index: number;
+  isLoading?: boolean;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, index }) => {
+// Skeleton Loader Component
+const ProductCardSkeleton: React.FC<{ index: number }> = ({ index }) => {
+  return (
+    <div
+      className="bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/20 h-full flex flex-col animate-pulse"
+      style={{
+        animationDelay: `${index * 0.1}s`
+      }}
+    >
+      {/* Image skeleton */}
+      <div className="relative overflow-hidden flex-shrink-0">
+        <div className="w-full h-80 bg-gray-200"></div>
+      </div>
+
+      {/* Content skeleton */}
+      <div className="p-6 flex flex-col flex-grow">
+        <div className="flex items-center justify-between mb-2">
+          <div className="h-4 bg-gray-200 rounded w-20"></div>
+          <div className="h-6 bg-gray-200 rounded w-16"></div>
+        </div>
+
+        <div className="h-5 bg-gray-200 rounded w-3/4 mb-2"></div>
+        <div className="h-4 bg-gray-200 rounded w-full mb-1"></div>
+        <div className="h-4 bg-gray-200 rounded w-2/3 mb-3"></div>
+
+        <div className="mt-auto">
+          <div className="h-6 bg-gray-200 rounded w-32 mb-2"></div>
+          <div className="h-4 bg-gray-200 rounded w-40 mb-4"></div>
+          <div className="h-12 bg-gray-200 rounded w-full"></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ProductCard: React.FC<ProductCardProps> = ({ product, index, isLoading = false }) => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
-
   const { logAddToCart } = useTracking();
+  const { selectedCountry } = useCurrency();
+
+  // Show skeleton if loading
+  if (isLoading) {
+    return <ProductCardSkeleton index={index} />;
+  }
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
     addToCart(product, 1);
-    // You could show a toast notification here
     console.log('Added to cart:', product.name);
 
     logAddToCart(product._id, {
-    name: product.name,
-    category: product.category,
-    price: product.price,
-    page: window.location.pathname,
-  });
+      name: product.name,
+      category: product.category,
+      price: product.price,
+      page: window.location.pathname,
+    });
   };
 
   const handleWishlistToggle = (e: React.MouseEvent) => {
@@ -52,20 +90,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, index }) => {
     navigate(`/product/${product._id}`);
   };
 
-  const { selectedCountry } = useCurrency();
-
   const getDisplayPrice = () => {
-  if (product.prices?.[selectedCountry.currency]) {
-    return product.prices[selectedCountry.currency];
-  }
-  return { amount: product.price, symbol: "₹" };
-};
+    if (product.prices?.[selectedCountry.currency]) {
+      return product.prices[selectedCountry.currency];
+    }
+    return { amount: product.price, symbol: "₹" };
+  };
 
-
-const { amount, symbol } = getDisplayPrice();
-
-
-
+  const { amount, symbol } = getDisplayPrice();
 
   return (
     <div
@@ -100,13 +132,11 @@ const { amount, symbol } = getDisplayPrice();
               Best Seller
             </span>
           )}
-         {(product.discount ?? 0) > 0 && (
-  <span className="px-3 py-1 bg-red-500 text-white text-xs font-medium rounded-full">
-    -{(product.discount ?? 0)}%
-  </span>
-)}
-
-          
+          {(product.discount ?? 0) > 0 && (
+            <span className="px-3 py-1 bg-red-500 text-white text-xs font-medium rounded-full">
+              -{(product.discount ?? 0)}%
+            </span>
+          )}
           {product.inStock === false && (
             <span className="px-3 py-1 bg-gray-500 text-white text-xs font-medium rounded-full">
               Out of Stock
@@ -159,17 +189,17 @@ const { amount, symbol } = getDisplayPrice();
 
         <div className="mt-auto">
           <div className="flex items-center space-x-2">
-  <span className="text-xl font-semibold text-slate-800">
-    {symbol}{amount.toLocaleString()}
-  </span>
+            <span className="text-xl font-semibold text-slate-800">
+              {symbol}{amount.toLocaleString()}
+            </span>
 
-  {(product.originalPrice ?? 0) > (product.price ?? 0) && (
-  <span className="text-sm text-slate-500 line-through">
-   {symbol}
-    {(product.originalPrice ?? product.price).toLocaleString()}
-  </span>
-)}
-</div>
+            {(product.originalPrice ?? 0) > (product.price ?? 0) && (
+              <span className="text-sm text-slate-500 line-through">
+                {symbol}
+                {(product.originalPrice ?? product.price).toLocaleString()}
+              </span>
+            )}
+          </div>
 
           <div className="flex items-center space-x-2 mb-4">
             <span className="text-xs text-slate-600">{product.metalType}</span>

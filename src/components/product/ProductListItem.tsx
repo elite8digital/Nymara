@@ -4,29 +4,84 @@ import { Star, Heart, ShoppingBag, Eye } from "lucide-react";
 import { Product, useCart, useWishlist } from "@/contexts/AppContext";
 import { useTracking } from "@/contexts/TrackingContext";
 
-
 interface ProductListItemProps {
   product: Product;
   index: number;
+  isLoading?: boolean;
 }
 
-const ProductListItem: React.FC<ProductListItemProps> = ({ product, index }) => {
+// Skeleton Loader Component
+const ProductListItemSkeleton: React.FC<{ index: number }> = ({ index }) => {
+  return (
+    <div
+      className="bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/20 flex animate-pulse"
+      style={{ animationDelay: `${index * 0.1}s` }}
+    >
+      {/* Image skeleton */}
+      <div className="w-80 h-60 bg-gray-200 flex-shrink-0"></div>
+
+      {/* Content skeleton */}
+      <div className="flex-1 p-6 flex flex-col justify-between">
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <div className="h-6 bg-gray-200 rounded w-1/2"></div>
+            <div className="flex space-x-2">
+              <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
+              <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
+            </div>
+          </div>
+
+          <div className="space-y-2 mb-4">
+            <div className="h-4 bg-gray-200 rounded w-full"></div>
+            <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+            <div className="h-4 bg-gray-200 rounded w-4/6"></div>
+          </div>
+
+          <div className="flex items-center space-x-4 mb-4">
+            <div className="h-4 bg-gray-200 rounded w-24"></div>
+            <div className="h-6 bg-gray-200 rounded w-16"></div>
+          </div>
+
+          <div className="flex items-center space-x-4 mb-4">
+            <div className="h-4 bg-gray-200 rounded w-20"></div>
+            <div className="h-4 bg-gray-200 rounded w-20"></div>
+            <div className="h-4 bg-gray-200 rounded w-20"></div>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="h-8 bg-gray-200 rounded w-32"></div>
+            <div className="h-6 bg-gray-200 rounded w-24"></div>
+          </div>
+          <div className="h-12 bg-gray-200 rounded w-40"></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ProductListItem: React.FC<ProductListItemProps> = ({ product, index, isLoading = false }) => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const { logAddToCart } = useTracking();
 
+  // Show skeleton if loading
+  if (isLoading) {
+    return <ProductListItemSkeleton index={index} />;
+  }
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
     addToCart(product, 1);
 
     logAddToCart(product._id, {
-    name: product.name,
-    category: product.category,
-    price: product.price,
-    page: window.location.pathname,
-  });
+      name: product.name,
+      category: product.category,
+      price: product.price,
+      page: window.location.pathname,
+    });
   };
 
   const handleWishlistToggle = (e: React.MouseEvent) => {
