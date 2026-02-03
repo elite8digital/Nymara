@@ -54,6 +54,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, index, isLoading = f
   const { logAddToCart } = useTracking();
   const { selectedCountry } = useCurrency();
 
+
+  console.log('Product prices:', product.prices);
+  console.log('Selected currency:', selectedCountry.currency);
+  console.log('Product:', product);
+
   // Show skeleton if loading
   if (isLoading) {
     return <ProductCardSkeleton index={index} />;
@@ -89,13 +94,37 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, index, isLoading = f
   const handleProductClick = () => {
     navigate(`/product/${product._id}`);
   };
+  const currencyRates: Record<string, { rate: number; symbol: string }> = {
+  INR: { rate: 1, symbol: "₹" },
+  USD: { rate: 0.012, symbol: "$" },
+  GBP: { rate: 0.0095, symbol: "£" },
+  CAD: { rate: 0.016, symbol: "CA$" },
+  EUR: { rate: 0.011, symbol: "€" },
+  AUD: { rate: 0.018, symbol: "A$" },
+  JPY: { rate: 1.78, symbol: "¥" },
+};
 
-  const getDisplayPrice = () => {
-    if (product.prices?.[selectedCountry.currency]) {
-      return product.prices[selectedCountry.currency];
-    }
-    return { amount: product.price, symbol: "₹" };
+
+ const getDisplayPrice = () => {
+  const currency = selectedCountry?.currency || "INR";
+  const rateObj = currencyRates[currency] || currencyRates.INR;
+  const { rate, symbol } = rateObj;
+
+  // ✅ Prefer backend-provided converted amount
+  if (product.prices?.[currency]?.amount) {
+    return {
+      amount: product.prices[currency].amount,
+      symbol,
+    };
+  }
+
+  // ✅ Local fallback conversion
+  return {
+    amount: Number((product.price * rate).toFixed(2)),
+    symbol,
   };
+};
+
 
   const { amount, symbol } = getDisplayPrice();
 

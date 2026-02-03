@@ -6,7 +6,6 @@ import { Product, useCart, useWishlist } from "@/contexts/AppContext";
 import { useCurrency } from "@/contexts/CurrencyContext"; // ✅ your existing context
 import { useTracking } from "@/contexts/TrackingContext";
 
-
 interface RelatedProductsProps {
   products: Product[];
 }
@@ -23,12 +22,12 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ products }) => {
     e.stopPropagation();
     addToCart(product, 1);
 
-      logAddToCart(product._id, {
-    name: product.name,
-    category: product.category,
-    price: product.price,
-    page: window.location.pathname,
-  });
+    logAddToCart(product._id, {
+      name: product.name,
+      category: product.category,
+      price: product.price,
+      page: window.location.pathname,
+    });
   };
 
   const handleWishlistToggle = (product: Product, e: React.MouseEvent) => {
@@ -55,24 +54,22 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ products }) => {
 
   // ✅ Compute formatted price based on selected country
   const getDisplayPrice = (product: Product, basePrice: number) => {
-    if (!basePrice) return "—";
+  if (!basePrice) return "—";
 
-    const currency = selectedCountry?.currency || "INR";
-    const rateObj = currencyRates[currency] || currencyRates.INR;
-    const rate = rateObj.rate;
-    const symbol = rateObj.symbol;
+  const currency = selectedCountry?.currency || "INR";
+  const rateObj = currencyRates[currency] || currencyRates.INR;
+  const { rate, symbol } = rateObj;
 
-    // ✅ Prefer backend-provided converted price
-    if (product.prices && product.prices[currency]?.amount) {
-      return `${product.prices[currency].symbol}${product.prices[
-        currency
-      ].amount.toLocaleString()}`;
-    }
+  // ✅ Backend amount + local symbol (SAFE)
+  if (product.prices && product.prices[currency]?.amount) {
+    return `${symbol}${product.prices[currency].amount.toLocaleString()}`;
+  }
 
-    // ✅ Local fallback conversion
-    const converted = (basePrice * rate).toFixed(2);
-    return `${symbol}${Number(converted).toLocaleString()}`;
-  };
+  // ✅ Local fallback conversion
+  const converted = (basePrice * rate).toFixed(2);
+  return `${symbol}${Number(converted).toLocaleString()}`;
+};
+
 
   return (
     <div className="mt-16">
@@ -116,11 +113,10 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ products }) => {
                   </span>
                 )}
                 {(product.discount ?? 0) > 0 && (
-  <span className="px-2 py-1 bg-red-500 text-white text-xs font-medium rounded-full">
-    -{product.discount ?? 0}%
-  </span>
-)}
-
+                  <span className="px-2 py-1 bg-red-500 text-white text-xs font-medium rounded-full">
+                    -{product.discount ?? 0}%
+                  </span>
+                )}
               </div>
 
               {/* Wishlist button */}
@@ -166,11 +162,13 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ products }) => {
                   {getDisplayPrice(product, product.price)}
                 </span>
                 {(product.originalPrice ?? 0) > (product.price ?? 0) && (
-  <span className="text-sm text-gray-500 line-through">
-    {getDisplayPrice(product, product.originalPrice ?? product.price)}
-  </span>
-)}
-
+                  <span className="text-sm text-gray-500 line-through">
+                    {getDisplayPrice(
+                      product,
+                      product.originalPrice ?? product.price,
+                    )}
+                  </span>
+                )}
               </div>
 
               {/* Add to Cart */}
@@ -181,9 +179,8 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ products }) => {
               >
                 <ShoppingBag className="w-3 h-3" />
                 <span>
-  {(product.stock ?? 0) > 0 ? "Add to Cart" : "Out of Stock"}
-</span>
-
+                  {(product.stock ?? 0) > 0 ? "Add to Cart" : "Out of Stock"}
+                </span>
               </button>
             </div>
           </div>

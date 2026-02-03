@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Star, Heart, ShoppingBag, Eye } from "lucide-react";
 import { Product, useCart, useWishlist } from "@/contexts/AppContext";
 import { useTracking } from "@/contexts/TrackingContext";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 interface ProductListItemProps {
   product: Product;
@@ -66,6 +67,7 @@ const ProductListItem: React.FC<ProductListItemProps> = ({ product, index, isLoa
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const { logAddToCart } = useTracking();
+  const { selectedCountry } = useCurrency();
 
   // Show skeleton if loading
   if (isLoading) {
@@ -83,6 +85,15 @@ const ProductListItem: React.FC<ProductListItemProps> = ({ product, index, isLoa
       page: window.location.pathname,
     });
   };
+
+  const getDisplayPrice = () => {
+    if (product.prices?.[selectedCountry.currency]) {
+      return product.prices[selectedCountry.currency];
+    }
+    return { amount: product.price, symbol: "₹" };
+  };
+
+  const { amount, symbol } = getDisplayPrice();
 
   const handleWishlistToggle = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -219,12 +230,12 @@ const ProductListItem: React.FC<ProductListItemProps> = ({ product, index, isLoa
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <span className="text-2xl font-semibold text-slate-800">
-              ₹{product.price?.toLocaleString()}
+      {symbol}{amount?.toLocaleString()}
             </span>
             {product.originalPrice && product.originalPrice > product.price && (
               <>
                 <span className="text-lg text-slate-500 line-through">
-                  ₹{product.originalPrice.toLocaleString()}
+          {symbol}{product.originalPrice.toLocaleString()}
                 </span>
                 <span className="text-sm font-medium text-red-500 bg-red-50 px-2 py-1 rounded-full">
                   Save {product.discount || 0}%
