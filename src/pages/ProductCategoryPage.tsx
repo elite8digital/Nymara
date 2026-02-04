@@ -18,6 +18,8 @@ const ProductCategoryPage: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+  const [hasInitialLoad, setHasInitialLoad] = useState(false);
+  
 
   const {
     filteredProducts,
@@ -51,21 +53,37 @@ const ProductCategoryPage: React.FC = () => {
   // Mark page loaded after initial render
   useEffect(() => {
     setIsLoaded(true);
-    // Simulate loading products (adjust timing as needed)
-    const timer = setTimeout(() => {
-      setIsLoadingProducts(false);
-    }, 500);
-    return () => clearTimeout(timer);
   }, []);
 
-  // Set loading state when filters change
+  // Handle initial loading - only stop when we actually have products
   useEffect(() => {
-    setIsLoadingProducts(true);
-    const timer = setTimeout(() => {
-      setIsLoadingProducts(false);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [filters, searchQuery]);
+    if (!hasInitialLoad) {
+      // Wait for products to be available
+      if (filteredProducts.length > 0) {
+        setHasInitialLoad(true);
+        setIsLoadingProducts(false);
+      }
+      // If filters are set but still no products after a reasonable time, assume empty results
+      const timer = setTimeout(() => {
+        if (filteredProducts.length === 0) {
+          setHasInitialLoad(true);
+          setIsLoadingProducts(false);
+        }
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [filteredProducts.length, hasInitialLoad]);
+
+  // Handle loading state for filter changes (after initial load)
+  useEffect(() => {
+    if (hasInitialLoad) {
+      setIsLoadingProducts(true);
+      const timer = setTimeout(() => {
+        setIsLoadingProducts(false);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [filters, searchQuery, hasInitialLoad]);
 
   // Reset to page 1 when filters change
   useEffect(() => {
