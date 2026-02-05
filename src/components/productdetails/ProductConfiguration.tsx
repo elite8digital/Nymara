@@ -31,6 +31,9 @@ const category = Array.isArray(product.category)
     // Hide for Earrings
     if (category.includes("earring")) return null;
 
+    if (category.includes("necklace")) return null;
+
+
     // Bracelet Standard Size UI
     if (category.includes("bracelet")) {
       return (

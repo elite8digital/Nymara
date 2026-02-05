@@ -65,6 +65,11 @@ const ProductCategoryPage: React.FC = () => {
     }
   }, [actualCategory, actualSubCategory]);
 
+  useEffect(() => {
+  window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+}, [actualCategory, actualSubCategory]);
+
+
   // Mark page loaded after initial render
   useEffect(() => {
     setIsLoaded(true);
