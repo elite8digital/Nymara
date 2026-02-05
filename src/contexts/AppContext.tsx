@@ -110,6 +110,13 @@ variants?: Array<{
   };
   tags?: string[];
   gender?: "Men" | "Women" | "Unisex";
+
+  metalBases?: Array<{
+    id: string;        
+    purity: string;   
+  }>;
+
+  currentPurity?: string;
 }
 
 export interface CartItem extends Product {
@@ -730,4 +737,5 @@ export const useAuth = () => {
     isLoggedIn: state.user.isLoggedIn
   };
 };
+
 
