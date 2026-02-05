@@ -153,33 +153,19 @@ const Header = () => {
         scrollToSection(action.target);
         break;
       case "navigate":
-        const category = getCategoryFromPath(action.target);
-
-        if (category) {
-          resetFilters();
-          navigate("/products");
+        // Check if this is a category/subcategory URL
+        if (action.target.startsWith("/products/") || 
+            action.target.match(/^\/(rings|earrings|necklaces|bracelets|mens)/)) {
+          
+          // Clear any existing search query
+          setSearchQuery("");
+          
+          // Navigate to the URL directly - let ProductCategoryPage handle the filtering
+          navigate(action.target);
+          
           setTimeout(() => {
-            const parts = category.split(" ");
-            const mainCategory = parts[0]; // e.g. "mens"
-            const subCategory =
-              parts.length > 1 ? parts.slice(1).join(" ") : "";
-
-            setFilters({
-              category: [mainCategory],
-              subCategory: subCategory ? [subCategory] : [],
-              metalType: [],
-              stoneType: [],
-              style: [],
-              size: [],
-              color: [],
-              sortBy: "best-seller",
-            });
-
-            const searchTerms = category.split(" ");
-            if (searchTerms.length > 0) {
-              setSearchQuery(searchTerms[0]);
-            }
-          }, 100);
+            window.scrollTo(0, 0);
+          }, 0);
         } else {
           navigate(action.target);
           setTimeout(() => {
@@ -320,7 +306,7 @@ const Header = () => {
               <div className="vrai-dropdown-container">
                 <button
                   className="flex items-center space-x-1 vrai-nav-link py-3"
-                  onClick={() => handleNavigation("earrings", { type: "navigate", target: "/rings" })}
+                  onClick={() => handleNavigation("earrings", { type: "navigate", target: "/earrings" })}
                 >
                   <span className="text-sm">Earrings</span>
                   <ChevronDown className="w-3 h-3 transition-transform duration-200" />
@@ -344,7 +330,7 @@ const Header = () => {
               <div className="vrai-dropdown-container">
                 <button
                   className="flex items-center space-x-1 vrai-nav-link py-3"
-                  onClick={() => handleNavigation("necklace", { type: "navigate", target: "/rings" })}
+                  onClick={() => handleNavigation("necklaces", { type: "navigate", target: "/necklaces" })}
                 >
                   <span className="text-sm">Necklaces</span>
                   <ChevronDown className="w-3 h-3 transition-transform duration-200" />
@@ -368,7 +354,7 @@ const Header = () => {
               <div className="vrai-dropdown-container">
                 <button
                   className="flex items-center space-x-1 vrai-nav-link py-3"
-                  onClick={() => handleNavigation("bracelet", { type: "navigate", target: "/rings" })}
+                  onClick={() => handleNavigation("bracelets", { type: "navigate", target: "/bracelets" })}
                 >
                   <span className="text-sm">Bracelets</span>
                   <ChevronDown className="w-3 h-3 transition-transform duration-200" />
@@ -392,7 +378,7 @@ const Header = () => {
               <div className="vrai-dropdown-container">
                 <button
                   className="flex items-center space-x-1 vrai-nav-link py-3"
-                  onClick={() => handleNavigation("mens", { type: "navigate", target: "/rings" })}
+                  onClick={() => handleNavigation("mens", { type: "navigate", target: "/mens" })}
                 >
                   <span className="text-sm">Men's</span>
                   <ChevronDown className="w-3 h-3 transition-transform duration-200" />

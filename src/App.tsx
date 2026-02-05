@@ -408,6 +408,51 @@ function App() {
                 path="/products/:category"
                 element={<ProductCategoryPage />}
               />
+              <Route
+                path="/products/:category/:subCategory"
+                element={<ProductCategoryPage />}
+              />
+              {/* Legacy routes for direct category access */}
+              <Route
+                path="/rings"
+                element={<ProductCategoryPage />}
+              />
+              <Route
+                path="/rings/:subCategory"
+                element={<ProductCategoryPage />}
+              />
+              <Route
+                path="/earrings"
+                element={<ProductCategoryPage />}
+              />
+              <Route
+                path="/earrings/:subCategory"
+                element={<ProductCategoryPage />}
+              />
+              <Route
+                path="/necklaces"
+                element={<ProductCategoryPage />}
+              />
+              <Route
+                path="/necklaces/:subCategory"
+                element={<ProductCategoryPage />}
+              />
+              <Route
+                path="/bracelets"
+                element={<ProductCategoryPage />}
+              />
+              <Route
+                path="/bracelets/:subCategory"
+                element={<ProductCategoryPage />}
+              />
+              <Route
+                path="/mens"
+                element={<ProductCategoryPage />}
+              />
+              <Route
+                path="/mens/:subCategory"
+                element={<ProductCategoryPage />}
+              />
               <Route path="/product/:id" element={<ProductDetail />} />
               <Route path="/about" element={<AboutUs />} />
               <Route path="/education" element={<EducationPage />} />

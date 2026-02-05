@@ -10,6 +10,7 @@ interface ActiveFilters {
   gender: string[];
   color: string[];
   category: string[];
+  subCategory: string[];
   sortBy: string;
 }
 
@@ -21,6 +22,7 @@ interface FilterOptions {
   gender: string[];
   color: string[];
   category: string[];
+  subCategory: string[];
   sortBy: Array<{
     value: string;
     label: string;
@@ -48,6 +50,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
       size: [],
       color: [],
       category: [],
+      subCategory: [],
       gender: [],
       sortBy: "best-seller"
     });
@@ -71,7 +74,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 
   return (
     <div className="glass-morphism rounded-2xl p-6 filter-slide-down">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-6">
         {/* Category */}
         <div>
           <h4 className="font-medium text-slate-800 mb-3">Category</h4>
@@ -94,6 +97,34 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                 </div>
                 <span className="text-sm text-slate-700 group-hover:text-[#9a8457] transition-colors truncate">
                   {category}
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        {/* SubCategory */}
+        <div>
+          <h4 className="font-medium text-slate-800 mb-3">SubCategory</h4>
+          <div className="space-y-2 max-h-40 overflow-y-auto">
+            {filterOptions.subCategory.slice(0, 8).map(subCategory => (
+              <label key={subCategory} className="flex items-center cursor-pointer group">
+                <input
+                  type="checkbox"
+                  className="sr-only"
+                  checked={activeFilters.subCategory.includes(subCategory)}
+                  onChange={() => toggleFilter('subCategory', subCategory)}
+                />
+                <div className={`w-4 h-4 bg-white border-2 rounded mr-3 transition-colors relative ${activeFilters.subCategory.includes(subCategory)
+                    ? 'border-[#9a8457]'
+                    : 'border-slate-300 group-hover:border-[#9a8457]'
+                  }`}>
+                  {activeFilters.subCategory.includes(subCategory) && (
+                    <div className="absolute inset-0.5 bg-[#9a8457] rounded-sm"></div>
+                  )}
+                </div>
+                <span className="text-sm text-slate-700 group-hover:text-[#9a8457] transition-colors truncate">
+                  {subCategory}
                 </span>
               </label>
             ))}

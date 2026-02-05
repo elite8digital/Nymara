@@ -331,7 +331,7 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
         ...state,
         searchQuery: '',
         filters: {
-          metalType: ["18K Gold"],
+          metalType: [],
           stoneType: [],
           style: [],
           size: [],
@@ -444,6 +444,7 @@ export const useProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        console.log("🚀 Fetching products from backend...");
         // Fetch all products without filters
         const res = await axios.get(`${API_URL}/api/user/ornaments`, {
           params: {
@@ -453,6 +454,13 @@ export const useProducts = () => {
         });
 
         if (res.data?.ornaments) {
+          console.log("📦 Products fetched from backend:", res.data.ornaments.length);
+          console.log("📋 Sample products:", res.data.ornaments.slice(0, 3).map((p: any) => ({ 
+            name: p.name, 
+            category: p.category, 
+            subCategory: p.subCategory,
+            metal: p.metal?.metalType 
+          })));
           dispatch({ type: "SET_PRODUCTS", payload: res.data.ornaments });
         }
       } catch (error: any) {
@@ -460,11 +468,25 @@ export const useProducts = () => {
       }
     };
 
-    fetchProducts();
-  }, [dispatch]); // Only fetch once on mount
+    // Only fetch if we don't have products yet
+    if (state.products.length === 0) {
+      fetchProducts();
+    }
+  }, [state.products.length]); // Only depend on products length
 
   const getFilteredProducts = () => {
     let filtered = [...state.products];
+    
+    console.log("🔍 FILTERING DEBUG:");
+    console.log("📦 Total products:", filtered.length);
+    console.log("🔍 Search query:", state.searchQuery);
+    console.log("🎯 Active filters:", state.filters);
+    
+    // If no products loaded yet, return empty array
+    if (filtered.length === 0) {
+      console.log("⚠️ No products loaded yet, returning empty array");
+      return [];
+    }
 
     // Filter by search query
     if (state.searchQuery && state.searchQuery.trim() !== '') {
@@ -475,6 +497,7 @@ export const useProducts = () => {
         product.category?.toLowerCase().includes(query) ||
         product.tags?.some((tag: string) => tag.toLowerCase().includes(query))
       );
+      console.log("🔍 After search filter:", filtered.length, "products");
     }
 
     // Filter by category
@@ -483,46 +506,55 @@ export const useProducts = () => {
         const productCategory = Array.isArray(product.category) 
           ? product.category 
           : [product.category];
-        return state.filters.category.some(cat => 
+        const matches = state.filters.category.some(cat => 
           productCategory.some((pc: string) => pc?.toLowerCase() === cat.toLowerCase())
         );
+        return matches;
       });
+      console.log("📂 After category filter:", filtered.length, "products");
     }
 
     // Filter by subCategory
     if (state.filters.subCategory.length > 0) {
+      console.log("🏷️ Filtering by subCategory:", state.filters.subCategory);
       filtered = filtered.filter((product: any) => {
-        const productSubCats = Array.isArray(product.subCategory) 
-          ? product.subCategory 
-          : product.subCategory ? [product.subCategory] : [];
-        return state.filters.subCategory.some(subCat => 
-          productSubCats.some((psc: string) => psc?.toLowerCase() === subCat.toLowerCase())
+        // Handle both string and array subCategory from backend
+        const productSubCategory = product.subCategory;
+        console.log("🏷️ Product subCategory:", productSubCategory, "for product:", product.name);
+        
+        if (!productSubCategory) return false;
+        
+        // Convert to array if it's a string
+        const productSubCats = Array.isArray(productSubCategory) 
+          ? productSubCategory 
+          : [productSubCategory];
+        
+        const matches = state.filters.subCategory.some(subCat => 
+          productSubCats.some((psc: string) => 
+            psc?.toLowerCase().trim() === subCat.toLowerCase().trim()
+          )
         );
+        
+        console.log("🏷️ SubCategory match:", matches, "for", product.name);
+        return matches;
       });
+      console.log("🏷️ After subCategory filter:", filtered.length, "products");
     }
 
     // Filter by metal type
    // Filter by metal type (works with backend structure)
 // Metal filtering
 if (state.filters.metalType.length > 0) {
-  // If user manually chooses metals → use their selection
+  // User has selected specific metals → use their selection
   filtered = filtered.filter((product: any) => {
-    const productMetal = product?.metal?.metalType?.toLowerCase() || "";
+    const productMetal = product?.metal?.metalType?.toLowerCase().trim() || "";
     return state.filters.metalType.some(metal =>
-      productMetal === metal.toLowerCase()
+      productMetal === metal.toLowerCase().trim()
     );
   });
-
 } else {
-  // 🟡 DEFAULT FILTER: Only show pure Yellow Gold
-  filtered = filtered.filter((product: any) => {
-    const productMetal = product?.metal?.metalType || "";
-
-    return (
-      productMetal === "18K Gold" ||
-      productMetal === "14K Gold"
-    );
-  });
+  // NO DEFAULT FILTER - Show all products regardless of metal type
+  // This allows subcategory filtering to work properly
 }
 
 
@@ -611,6 +643,9 @@ if (state.filters.metalType.length > 0) {
         break;
     }
 
+    console.log("✅ Final filtered products:", filtered.length);
+    console.log("📋 Sample products:", filtered.slice(0, 3).map(p => ({ name: p.name, category: p.category, subCategory: p.subCategory })));
+    
     return filtered;
   };
 
@@ -644,6 +679,25 @@ if (state.filters.metalType.length > 0) {
     return Array.from(categories).sort();
   };
 
+  const getSubCategories = () => {
+    const subCategories = new Set<string>();
+    state.products.forEach((product: any) => {
+      if (product.subCategory) {
+        // Handle both string and array subCategory
+        if (Array.isArray(product.subCategory)) {
+          product.subCategory.forEach((subCat: string) => {
+            if (subCat && subCat.trim()) {
+              subCategories.add(subCat.trim());
+            }
+          });
+        } else if (typeof product.subCategory === 'string' && product.subCategory.trim()) {
+          subCategories.add(product.subCategory.trim());
+        }
+      }
+    });
+    return Array.from(subCategories).sort();
+  };
+
   return {
     products: state.products,
     filteredProducts: getFilteredProducts(),
@@ -654,6 +708,7 @@ if (state.filters.metalType.length > 0) {
     setFilters,
     resetFilters,
     getCategories,
+    getSubCategories,
   };
 };
 

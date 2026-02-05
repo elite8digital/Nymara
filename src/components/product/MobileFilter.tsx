@@ -9,6 +9,7 @@ interface ActiveFilters {
   size: string[];
   color: string[];
   category: string[];
+  subCategory: string[];
   sortBy: string;
 }
 
@@ -19,6 +20,7 @@ interface FilterOptions {
   size: string[];
   color: string[];
   category: string[];
+  subCategory: string[];
   sortBy: Array<{
     value: string;
     label: string;
@@ -48,6 +50,7 @@ const MobileFilter: React.FC<MobileFilterProps> = ({
       size: [],
       color: [],
       category: [],
+      subCategory: [],
       sortBy: "best-seller"
     });
   };
@@ -138,6 +141,26 @@ const MobileFilter: React.FC<MobileFilterProps> = ({
                       onClick={() => toggleFilter('category', category)}
                     >
                       {category}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* SubCategory */}
+              <div>
+                <h4 className="font-medium text-slate-800 mb-3">SubCategory</h4>
+                <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
+                  {filterOptions.subCategory.slice(0, 10).map(subCategory => (
+                    <button
+                      key={subCategory}
+                      className={`p-3 text-sm rounded-xl border transition-all duration-300 text-left ${
+                        activeFilters.subCategory.includes(subCategory)
+                          ? "bg-[#9a8457] text-white border-[#9a8457]"
+                          : "bg-white text-slate-700 border-slate-200"
+                      }`}
+                      onClick={() => toggleFilter('subCategory', subCategory)}
+                    >
+                      {subCategory}
                     </button>
                   ))}
                 </div>

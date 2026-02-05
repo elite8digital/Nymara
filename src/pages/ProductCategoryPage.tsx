@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import FilterBar from "@/components/product/FilterBar";
 import FilterPanel from "@/components/product/FilterPanel";
 import MobileFilter from "@/components/product/MobileFilter";
@@ -12,8 +12,13 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 const PRODUCTS_PER_PAGE = 12;
 
 const ProductCategoryPage: React.FC = () => {
-  const { category } = useParams();
+  const { category, subCategory } = useParams();
+  const location = useLocation();
   const [showFilters, setShowFilters] = useState(false);
+  
+  // Extract category from URL path if not in params (for legacy routes like /rings)
+  const actualCategory = category || location.pathname.split('/')[1];
+  const actualSubCategory = subCategory;
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -29,26 +34,36 @@ const ProductCategoryPage: React.FC = () => {
     setFilters,
     resetFilters,
     getCategories,
+    getSubCategories,
   } = useProducts();
 
-  // Set filters by category
+  // Set filters by category and subcategory
   useEffect(() => {
-    if (category) {
-      setFilters({
+    console.log("🎯 ProductCategoryPage: Setting filters for category:", actualCategory, "subCategory:", actualSubCategory);
+    
+    if (actualCategory) {
+      const newFilters = {
         ...filters,
-        category: [category],
-        // Only set default if user has not selected a metal yet
-        metalType: filters.metalType.length > 0 ? filters.metalType : ["18K Gold"],
+        category: [actualCategory],
         sortBy: filters.sortBy || "best-seller",
-      });
+      };
+      
+      // Add subcategory filter if present
+      if (actualSubCategory) {
+        newFilters.subCategory = [actualSubCategory];
+        console.log("🏷️ Setting subCategory filter:", [actualSubCategory]);
+      } else {
+        newFilters.subCategory = [];
+        console.log("🏷️ Clearing subCategory filter");
+      }
+      
+      console.log("🎯 Applying filters:", newFilters);
+      setFilters(newFilters);
     } else {
+      console.log("🔄 No category, resetting filters");
       resetFilters();
-      setFilters({
-        ...filters,
-        metalType: ["18K Gold"],   // force default on no category
-      });
     }
-  }, [category]);
+  }, [actualCategory, actualSubCategory]);
 
   // Mark page loaded after initial render
   useEffect(() => {
@@ -203,6 +218,7 @@ const ProductCategoryPage: React.FC = () => {
     ],
     gender: ["Men", "Women", "Unisex"],
     category: getCategories(),
+    subCategory: getSubCategories(),
     sortBy: [
       { value: "best-seller", label: "Best Seller" },
       { value: "newest", label: "Newest" },
@@ -214,7 +230,21 @@ const ProductCategoryPage: React.FC = () => {
 
   // Dynamic title
   const getCategoryTitle = () => {
-    if (category) {
+    if (actualSubCategory && actualCategory) {
+      const subCategoryMap: { [key: string]: string } = {
+        studs: "Stud Earrings",
+        hoops: "Hoop Earrings",
+        tennis: "Tennis Collection",
+        pendants: "Pendant Necklaces",
+        bangles: "Bangles Collection",
+        gemstone: "Gemstone Collection",
+        gold: "Gold Collection",
+        fashion: "Fashion Collection",
+      };
+      return subCategoryMap[actualSubCategory.toLowerCase()] || 
+             `${actualSubCategory.charAt(0).toUpperCase() + actualSubCategory.slice(1)} ${actualCategory.charAt(0).toUpperCase() + actualCategory.slice(1)}`;
+    }
+    if (actualCategory) {
       const categoryMap: { [key: string]: string } = {
         rings: "Rings Collection",
         earrings: "Earrings Collection",
@@ -223,15 +253,10 @@ const ProductCategoryPage: React.FC = () => {
         mens: "Men's Jewelry Collection",
         engagement: "Engagement Rings",
         wedding: "Wedding Bands",
-        studs: "Stud Earrings",
-        hoops: "Hoop Earrings",
-        tennis: "Tennis Collection",
-        pendants: "Pendant Necklaces",
-        bangles: "Bangles Collection",
       };
       return (
-        categoryMap[category.toLowerCase()] ||
-        `${category.charAt(0).toUpperCase() + category.slice(1)} Collection`
+        categoryMap[actualCategory.toLowerCase()] ||
+        `${actualCategory.charAt(0).toUpperCase() + actualCategory.slice(1)} Collection`
       );
     }
     if (searchQuery) return `Search Results for "${searchQuery}"`;
@@ -241,8 +266,22 @@ const ProductCategoryPage: React.FC = () => {
   };
 
   const getCategorySubtitle = () => {
-    if (category || filters.category.length > 0) {
-      const categoryName = category || filters.category[0];
+    if (actualSubCategory && actualCategory) {
+      const subCategoryDescriptions: { [key: string]: string } = {
+        studs: "Classic stud earrings for everyday elegance and timeless sophistication",
+        hoops: "Modern hoop earrings that make a statement and frame your face beautifully",
+        tennis: "Luxury tennis jewelry featuring continuous brilliant stones for ultimate glamour",
+        pendants: "Meaningful pendant necklaces for every occasion and personal expression",
+        bangles: "Traditional and modern bangles for timeless beauty and cultural elegance",
+        gemstone: "Exquisite gemstone jewelry featuring nature's most precious colored stones",
+        gold: "Pure gold jewelry crafted with traditional techniques and modern design",
+        fashion: "Contemporary fashion jewelry for the modern style-conscious individual",
+      };
+      return subCategoryDescriptions[actualSubCategory.toLowerCase()] || 
+             `Discover our exquisite collection of ${actualSubCategory.toLowerCase()} ${actualCategory.toLowerCase()}`;
+    }
+    if (actualCategory || filters.category.length > 0) {
+      const categoryName = actualCategory || filters.category[0];
       const descriptions: { [key: string]: string } = {
         rings:
           "Discover our exquisite collection of handcrafted rings, where timeless elegance meets contemporary sophistication",
@@ -250,15 +289,9 @@ const ProductCategoryPage: React.FC = () => {
           "Find the perfect symbol of your love with our stunning engagement ring collection",
         wedding: "Classic and contemporary wedding bands for your special day",
         earrings: "Elegant earrings to complement your unique style",
-        studs: "Classic stud earrings for everyday elegance",
-        hoops: "Modern hoop earrings that make a statement",
         necklaces: "Beautiful necklaces to enhance your natural radiance",
-        tennis:
-          "Luxury tennis jewelry featuring continuous brilliant stones",
-        pendants: "Meaningful pendant necklaces for every occasion",
         bracelets:
           "Sophisticated bracelets that add the perfect finishing touch",
-        bangles: "Traditional and modern bangles for timeless beauty",
         mens: "Distinguished jewelry collection designed for the modern gentleman",
       };
       return (

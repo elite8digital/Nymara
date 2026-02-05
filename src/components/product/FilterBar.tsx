@@ -44,6 +44,8 @@ const FilterBar: React.FC<FilterBarProps> = ({
       style: [],
       size: [],
       color: [],
+      category: [],
+      subCategory: [],
       sortBy: "best-seller"
     });
     setSearchQuery("");
