@@ -160,7 +160,7 @@ export interface AppState {
   selectedCurrency: string;
   searchQuery: string;
   filters: {
-    metalType: string[];
+    metalType: string[18K Gold];
     stoneType: string[];
     style: string[];
     size: string[];
@@ -737,5 +737,6 @@ export const useAuth = () => {
     isLoggedIn: state.user.isLoggedIn
   };
 };
+
 
 
