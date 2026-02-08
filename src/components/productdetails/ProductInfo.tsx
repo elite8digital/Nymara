@@ -131,17 +131,18 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
 
         console.log("🔍 Full Base Product Received:", fullBase);
 
-        if (
-          fullBase.goldTotal === undefined ||
-          fullBase.mainDiamondTotal === undefined
-        ) {
-          console.warn("⚠ Missing totals on base product!", {
-            gold: fullBase.goldTotal,
-            main: fullBase.mainDiamondTotal,
-            side: fullBase.sideDiamondTotal,
-            gems: fullBase.gemstonesTotal,
-          });
-        }
+       
+      if (
+  fullBase.metalTotal === undefined ||
+  fullBase.mainDiamondTotal === undefined
+) {
+  console.warn("⚠ Missing totals on base product!", {
+    metal: fullBase.metalTotal,
+    main: fullBase.mainDiamondTotal,
+    side: fullBase.sideDiamondTotal,
+    gems: fullBase.gemstonesTotal,
+  });
+}
 
         // Update product in UI
         setProduct({
@@ -177,7 +178,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
         <div className="flex justify-between text-sm py-1">
           <span className="text-gray-600">Gold Value</span>
           <span className="font-semibold">
-            {product.currency}{product.goldTotal?.toLocaleString()}
+            {product.currency}{product.metalTotal?.toLocaleString()}
           </span>
         </div>
 
