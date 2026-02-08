@@ -56,7 +56,7 @@ export interface Product {
 
   currency?: string;  
 
-goldTotal?: number;
+metalTotal?: number;
 mainDiamondTotal?: number;
 sideDiamondTotal?: number;
 gemstonesTotal?: number;
@@ -737,6 +737,7 @@ export const useAuth = () => {
     isLoggedIn: state.user.isLoggedIn
   };
 };
+
 
 
 
