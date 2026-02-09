@@ -286,7 +286,9 @@ const ProductDetail = () => {
               setActiveImageIndex={setActiveImageIndex}
             />
 
-            {product.purityOptions && product.purityOptions.length > 0 && (
+            {
+ Array.isArray(product.purityOptions) &&
+ product.purityOptions.length > 0 && (
   <div className="flex items-center gap-3">
     <span className="text-sm font-medium text-gray-600">
       Purity:
@@ -295,11 +297,11 @@ const ProductDetail = () => {
     {product.purityOptions.map((option) => (
       <button
         key={option.id}
-        disabled={option.id === product._id}
+        disabled={option.purity === product.currentPurity}
         onClick={() => navigate(`/product/${option.id}`)}
         className={`px-4 py-2 border rounded-md text-sm transition
           ${
-            option.id === product._id
+            option.purity === product.currentPurity
               ? "bg-[#9a8457] text-white border-[#9a8457]"
               : "border-gray-300 hover:border-[#9a8457] hover:text-[#9a8457]"
           }`}
@@ -390,3 +392,4 @@ const ProductDetail = () => {
 
 
 export default ProductDetail;
+
