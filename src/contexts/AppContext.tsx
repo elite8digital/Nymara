@@ -63,6 +63,13 @@ gemstonesTotal?: number;
 
 basePrice?: number;
 
+purityOptions?: Array<{
+  id: string;
+  purity: string | null;
+  metalType?: string;
+}>;
+
+
 displayPrice?: number;
 convertedMakingCharge?: number;
 totalConvertedPrice?: number;
@@ -737,6 +744,7 @@ export const useAuth = () => {
     isLoggedIn: state.user.isLoggedIn
   };
 };
+
 
 
 
