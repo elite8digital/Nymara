@@ -41,6 +41,10 @@ const ProductCategoryPage: React.FC = () => {
   useEffect(() => {
     console.log("🎯 ProductCategoryPage: Setting filters for category:", actualCategory, "subCategory:", actualSubCategory);
     
+    // Reset initial load state when category changes
+    setHasInitialLoad(false);
+    setIsLoadingProducts(true);
+    
     if (actualCategory) {
       const newFilters = {
         ...filters,
@@ -66,9 +70,8 @@ const ProductCategoryPage: React.FC = () => {
   }, [actualCategory, actualSubCategory]);
 
   useEffect(() => {
-  window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
-}, [actualCategory, actualSubCategory]);
-
+    window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+  }, [actualCategory, actualSubCategory]);
 
   // Mark page loaded after initial render
   useEffect(() => {
@@ -78,19 +81,21 @@ const ProductCategoryPage: React.FC = () => {
   // Handle initial loading - only stop when we actually have products
   useEffect(() => {
     if (!hasInitialLoad) {
+      // Keep loading state true initially
+      setIsLoadingProducts(true);
+      
       // Wait for products to be available
       if (filteredProducts.length > 0) {
         setHasInitialLoad(true);
         setIsLoadingProducts(false);
-      }
-      // If filters are set but still no products after a reasonable time, assume empty results
-      const timer = setTimeout(() => {
-        if (filteredProducts.length === 0) {
+      } else {
+        // If filters are set but still no products after a reasonable time, assume empty results
+        const timer = setTimeout(() => {
           setHasInitialLoad(true);
           setIsLoadingProducts(false);
-        }
-      }, 2000);
-      return () => clearTimeout(timer);
+        }, 1500); // Reduced from 2000ms to 1500ms for faster response
+        return () => clearTimeout(timer);
+      }
     }
   }, [filteredProducts.length, hasInitialLoad]);
 
@@ -355,7 +360,7 @@ const ProductCategoryPage: React.FC = () => {
 
       {/* Products Section */}
       <div className="max-w-7xl mx-auto px-8 pb-20">
-        {/* Show loader or products */}
+        {/* Show loader while loading, products when loaded, or empty state */}
         {isLoadingProducts ? (
           <ProductGrid products={[]} viewMode={viewMode} isLoading={true} />
         ) : filteredProducts.length > 0 ? (
@@ -444,7 +449,7 @@ const ProductCategoryPage: React.FC = () => {
             )}
           </>
         ) : (
-          // Empty state
+          // Empty state - only shown after loading completes
           <div className="text-center py-16">
             <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <svg
