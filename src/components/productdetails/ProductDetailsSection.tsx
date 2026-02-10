@@ -82,57 +82,78 @@ const ProductDetailsSection: React.FC<ProductDetailsSectionProps> = ({
                   ))}
                 </div>
 
-                {/* Diamond Details */}
-                {product.diamondDetails && (
-                  <div className="mt-6 pt-6 border-t border-gray-200">
-                    <h4 className="text-lg font-bold text-gray-900 mb-4">
-                      DIAMOND DETAILS
-                    </h4>
-                    <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-5 rounded-lg border border-gray-200">
-                      {Object.entries(product.diamondDetails).map(
-                        ([key, value]) => (
-                          <div
-                            key={key}
-                            className="flex justify-between py-2 border-b border-gray-200 last:border-0"
-                          >
-                            <span className="text-gray-600 text-sm font-medium capitalize">
-                              {key.replace(/([A-Z])/g, " $1")}
-                            </span>
-                            <span className="font-semibold text-gray-900 text-sm">
-                              {String(value)}
-                            </span>
-                          </div>
-                        )
-                      )}
-                    </div>
-                  </div>
-                )}
+         
 
-                {/* Side Diamond Details */}
-                {product.sideDiamondDetails && (
-                  <div className="mt-6 pt-6 border-t border-gray-200">
-                    <h4 className="text-lg font-bold text-gray-900 mb-4">
-                      SIDE DIAMOND DETAILS
-                    </h4>
-                    <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-5 rounded-lg border border-gray-200">
-                      {Object.entries(product.sideDiamondDetails).map(
-                        ([key, value]) => (
-                          <div
-                            key={key}
-                            className="flex justify-between py-2 border-b border-gray-200 last:border-0"
-                          >
-                            <span className="text-gray-600 text-sm font-medium capitalize">
-                              {key.replace(/([A-Z])/g, " $1")}
-                            </span>
-                            <span className="font-semibold text-gray-900 text-sm">
-                              {String(value)}
-                            </span>
-                          </div>
-                        )
-                      )}
-                    </div>
-                  </div>
-                )}
+                   {product.diamondDetails && (
+  <div className="mt-6 pt-6 border-t border-gray-200">
+    <h4 className="text-lg font-bold text-gray-900 mb-4">
+      DIAMOND DETAILS
+    </h4>
+    <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-5 rounded-lg border border-gray-200">
+      {Object.entries(product.diamondDetails)
+        .filter(([key]) => key !== "useAuto") // 🚀 hide useAuto
+        .map(([key, value]) => (
+          <div
+            key={key}
+            className="flex justify-between py-2 border-b border-gray-200 last:border-0"
+          >
+            <span className="text-gray-600 text-sm font-medium capitalize">
+              {key
+                .replace(/([A-Z])/g, " $1")
+                .replace(/^./, str => str.toUpperCase())}
+            </span>
+            <span className="font-semibold text-gray-900 text-sm">
+              {String(value)}
+            </span>
+          </div>
+        ))}
+    </div>
+  </div>
+)}
+
+         {Array.isArray(product.sideDiamondDetails) &&
+ product.sideDiamondDetails.some(diamond =>
+   Object.values(diamond).some(value => Number(value) > 0)
+ ) && (
+  <div className="mt-6 pt-6 border-t border-gray-200">
+    <h4 className="text-lg font-bold text-gray-900 mb-4">
+      SIDE DIAMOND DETAILS
+    </h4>
+
+    {product.sideDiamondDetails.map((diamond, index) => {
+      const hasValue = Object.values(diamond).some(
+        value => Number(value) > 0
+      );
+
+      if (!hasValue) return null;
+
+      return (
+        <div
+          key={index}
+          className="bg-gradient-to-br from-gray-50 to-gray-100 p-5 rounded-lg border border-gray-200 mb-4"
+        >
+          {Object.entries(diamond)
+            .filter(([key, value]) => Number(value) > 0)
+            .map(([key, value]) => (
+              <div
+                key={key}
+                className="flex justify-between py-2 border-b border-gray-200 last:border-0"
+              >
+                <span className="text-gray-600 text-sm font-medium capitalize">
+                  {key
+                    .replace(/([A-Z])/g, " $1")
+                    .replace(/^./, str => str.toUpperCase())}
+                </span>
+                <span className="font-semibold text-gray-900 text-sm">
+                  {String(value)}
+                </span>
+              </div>
+            ))}
+        </div>
+      );
+    })}
+
+                
               </div>
 
               {/* Care Instructions & Warranty */}
