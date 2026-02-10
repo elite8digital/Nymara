@@ -91,7 +91,7 @@ const ProductDetailsSection: React.FC<ProductDetailsSectionProps> = ({
     </h4>
     <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-5 rounded-lg border border-gray-200">
       {Object.entries(product.diamondDetails)
-        .filter(([key]) => key !== "useAuto") // 🚀 hide useAuto
+        .filter(([key]) => key !== "useAuto") 
         .map(([key, value]) => (
           <div
             key={key}
