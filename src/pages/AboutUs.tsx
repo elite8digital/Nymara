@@ -10,6 +10,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import video from "../assets/vid.mp4";
+import nimay from "../assets/nimay.jpeg";
 
 const AboutUs = () => {
   const [activeSection, setActiveSection] = useState("story");
@@ -217,7 +218,7 @@ const AboutUs = () => {
                     </p>
                   </div>
 
-                  <div className="relative">
+                  {/* <div className="relative">
                     <div className="aspect-square bg-gradient-to-br from-[#9a8457]/10 to-[#9a8457]/20 rounded-2xl flex items-center justify-center border-2 border-[#9a8457]/30">
                       <div className="text-center">
                         <Heart className="w-16 h-16 text-[#9a8457] mx-auto mb-4" />
@@ -225,6 +226,23 @@ const AboutUs = () => {
                           A Son's Love
                         </p>
                         <p className="text-sm text-gray-600">
+                          The spark that started it all
+                        </p>
+                      </div>
+                    </div>
+                  </div> */}
+
+                       <div className="relative w-full md:w-80 lg:w-72 mx-auto">
+                    <div className="aspect-square bg-gradient-to-br from-[#9a8457]/10 to-[#9a8457]/20 rounded-2xl overflow-hidden border-2 border-[#9a8457]/30">
+                      <img
+                        src={nimay}
+                        alt="A Son's Love"
+                        className="w-full h-full object-cover"
+                      />
+
+                      <div className="absolute bottom-0 left-0 right-0 bg-black/40 text-white p-4 text-center">
+                        <p className="font-medium">A Son's Love</p>
+                        <p className="text-sm opacity-90">
                           The spark that started it all
                         </p>
                       </div>
@@ -431,3 +449,4 @@ const AboutUs = () => {
 };
 
 export default AboutUs;
+
