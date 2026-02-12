@@ -154,7 +154,7 @@ export default function Footer() {
               </div>
               <p className="text-xs text-gray-400">
                 IGI Certified Lab Diamonds<br />
-                GIA Grading Standards<br />
+        
                 Ethically Sourced Materials
               </p>
             </div>
@@ -233,4 +233,5 @@ export default function Footer() {
       </div>
     </footer>
   );
+
 }
