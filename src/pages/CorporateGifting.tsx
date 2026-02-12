@@ -73,7 +73,7 @@ export default function CorporateGifting() {
     {
       icon: <Star className="w-8 h-8" />,
       title: 'Premium Quality',
-      description: 'Every piece features ethically sourced lab-grown diamonds and recycled gold, certified by IGI and GIA.'
+      description: 'Every piece features ethically sourced lab-grown diamonds and recycled gold, certified by IGI'
     },
     {
       icon: <Package className="w-8 h-8" />,
@@ -219,7 +219,7 @@ export default function CorporateGifting() {
                   <CheckCircle className="w-5 h-5 text-white flex-shrink-0 mt-1" />
                   <div>
                     <h4 className="font-semibold mb-1">Certified Quality</h4>
-                    <p className="text-sm text-gray-300">IGI and GIA certified with lifetime warranty</p>
+                    <p className="text-sm text-gray-300">IGI certified with lifetime warranty</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -384,4 +384,5 @@ export default function CorporateGifting() {
       </div>
     </div>
   );
+
 }
