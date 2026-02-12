@@ -54,7 +54,7 @@ const EducationHubHome = () => {
     },
     {
       title: 'Same grading standards',
-      description: 'IGI and GIA certify lab-grown diamonds using identical 4C criteria',
+      description: 'IGI certify lab-grown diamonds using identical 4C criteria',
       icon: <Award className="w-6 h-6 text-purple-600" />
     }
   ];
@@ -203,7 +203,7 @@ const EducationHubHome = () => {
             </div>
             <div className="w-px h-12 bg-gray-200"></div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900">IGI/GIA/SGL</div>
+              <div className="text-2xl font-bold text-gray-900">IGI/SGL</div>
               <div className="text-sm text-gray-600">Certified Expertise</div>
             </div>
             <div className="w-px h-12 bg-gray-200"></div>
@@ -217,5 +217,6 @@ const EducationHubHome = () => {
     </section>
   );
 };
+
 
 export default EducationHubHome;
