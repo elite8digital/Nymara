@@ -35,7 +35,7 @@ const AboutUs = () => {
       icon: <Shield className="w-8 h-8" />,
       title: "Clarity & Trust",
       description:
-        "Complete transparency in product descriptions, exact weight specifications, and verified IGI or GIA certification for every creation.",
+        "Complete transparency in product descriptions, exact weight specifications, and verified IGI certification for every creation.",
     },
     {
       icon: <Globe className="w-8 h-8" />,
@@ -89,7 +89,7 @@ const AboutUs = () => {
       step: "03",
       title: "Quality Certification",
       description:
-        "Every piece independently certified by IGI or GIA for authenticity and quality assurance",
+        "Every piece independently certified by IGI for authenticity and quality assurance",
     },
     {
       step: "04",
@@ -449,4 +449,5 @@ const AboutUs = () => {
 };
 
 export default AboutUs;
+
 
