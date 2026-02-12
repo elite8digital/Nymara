@@ -70,7 +70,7 @@ export default function FranchiseOpportunity() {
     {
       icon: <Award className="w-8 h-8" />,
       title: 'Premium Quality',
-      description: 'Offer IGI and GIA certified lab-grown diamonds with lifetime warranty and buy-back policy.'
+      description: 'Offer IGI certified lab-grown diamonds with lifetime warranty and buy-back policy.'
     },
     {
       icon: <Heart className="w-8 h-8" />,
@@ -424,4 +424,5 @@ export default function FranchiseOpportunity() {
       </div>
     </div>
   );
+
 }
