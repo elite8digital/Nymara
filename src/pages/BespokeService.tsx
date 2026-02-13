@@ -353,9 +353,9 @@ export default function BespokeService() {
               <span>business@nymarajewels.com</span>
             </a>
             <span className="hidden sm:inline text-gray-400">|</span>
-            <a href="tel:+919424827503" className="flex items-center gap-2 text-gray-900 hover:text-gray-700">
+            <a href="tel:+447867089659" className="flex items-center gap-2 text-gray-900 hover:text-gray-700">
               <Phone className="w-5 h-5" />
-              <span>+91 94248 27503</span>
+              <span>+44 7867089659</span>
             </a>
           </div>
         </div>

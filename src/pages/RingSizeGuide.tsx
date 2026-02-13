@@ -125,7 +125,7 @@ export default function RingSizeGuide() {
             </a>
             {' '}or call{' '}
             <a href="tel:+919424827503" className="text-blue-600 hover:underline">
-              +91 94248 27503
+              +44 7867089659
             </a>
           </p>
         </div>

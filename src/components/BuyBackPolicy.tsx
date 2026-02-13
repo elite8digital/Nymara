@@ -193,12 +193,14 @@ export default function BuyBackPolicy() {
               </div>
             </div>
             
+            
+            
             <div className="flex items-center gap-4 bg-white/10 rounded-xl p-4 backdrop-blur-sm">
               <Phone className="w-6 h-6 text-slate-200" />
               <div>
                 <p className="text-slate-100 text-sm">Phone</p>
-                <a href="tel:+919424827503" className="text-white font-medium hover:text-amber-200 transition-colors">
-                  +91 94248 27503
+                <a href="tel:+447867089659" className="text-white font-medium hover:text-amber-200 transition-colors">
+                  +44 7867089659
                 </a>
                 <p className="text-slate-100 text-sm mt-1">Mon–Sat, 11 am – 5 pm</p>
               </div>

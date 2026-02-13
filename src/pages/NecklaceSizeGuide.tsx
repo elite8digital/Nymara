@@ -195,8 +195,8 @@ const [selectedLength, setSelectedLength] = useState<string | null>(null);
               business@nymarajewels.com
             </a>
             {' '}or call{' '}
-            <a href="tel:+919424827503" className="text-blue-600 hover:underline">
-              +91 94248 27503
+            <a href="tel:+447867089659" className="text-blue-600 hover:underline">
+              +44 7867089659
             </a>
           </p>
         </div>
