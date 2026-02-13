@@ -416,7 +416,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
     </span>
   </div>
 
-        <div className="flex justify-between text-base font-bold border-t pt-2">
+          <div className="flex justify-between text-base font-bold border-t pt-2">
           <span>Total Price</span>
           <span>
             {product?.currency}
