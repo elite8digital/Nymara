@@ -16,6 +16,15 @@ import {
 } from "lucide-react";
 import img1 from "../assets/4c.png";
 import video from "../assets/bracelets-video.gif";
+import round from '../assets/round2.png'
+import princess from '../assets/princess1.png'
+import emerald from '../assets/emerald.png'
+import oval from '../assets/oval.png'
+import cushion from '../assets/cushion.png'
+import pear from '../assets/pear.png'
+import marquise from '../assets/marquise.png'
+import asscher from '../assets/asscher.png'
+import heart from '../assets/heart.png'
 
 const EducationPage = () => {
   const [activeSection, setActiveSection] = useState("4cs");
@@ -203,8 +212,10 @@ const EducationPage = () => {
   ];
 
   const diamondShapes = [
+   
     {
       name: "Round Brilliant",
+      image: round, 
       description:
         "Most popular cut with maximum brilliance, featuring 57-58 facets perfectly arranged for light performance",
       ratio: "1.00",
@@ -214,6 +225,7 @@ const EducationPage = () => {
     },
     {
       name: "Princess",
+      image: princess, 
       description:
         "Square shape with brilliant-style faceting, sharp corners create contemporary appeal",
       ratio: "1.00-1.05",
@@ -224,6 +236,7 @@ const EducationPage = () => {
     },
     {
       name: "Emerald",
+      image: emerald, 
       description:
         "Rectangular step-cut with elegant hall-of-mirrors effect and clean lines",
       ratio: "1.30-1.50",
@@ -233,6 +246,7 @@ const EducationPage = () => {
     },
     {
       name: "Oval",
+      image: oval, 
       description:
         "Elongated brilliant cut that makes fingers appear longer while maximizing sparkle",
       ratio: "1.35-1.50",
@@ -242,6 +256,7 @@ const EducationPage = () => {
     },
     {
       name: "Cushion",
+      image: cushion, 
       description:
         "Pillow-like outline with vintage romance appeal and soft, rounded corners",
       ratio: "1.00-1.20",
@@ -251,6 +266,7 @@ const EducationPage = () => {
     },
     {
       name: "Pear",
+      image: pear, 
       description:
         "Teardrop shape combining round and marquise elements for unique elegance",
       ratio: "1.45-1.60",
@@ -260,6 +276,7 @@ const EducationPage = () => {
     },
     {
       name: "Marquise",
+      image: marquise, 
       description:
         "Boat-shaped with pointed ends, maximizes carat weight and creates dramatic presence",
       ratio: "1.90-2.20",
@@ -269,6 +286,7 @@ const EducationPage = () => {
     },
     {
       name: "Asscher",
+      image: asscher, 
       description:
         "Square step-cut with Art Deco allure and mesmerizing windmill pattern",
       ratio: "1.00-1.05",
@@ -278,6 +296,7 @@ const EducationPage = () => {
     },
     {
       name: "Heart",
+      image: heart, 
       description:
         "Ultimate symbol of romance with brilliant-style facets and distinctive cleft",
       ratio: "0.90-1.10",
@@ -395,10 +414,9 @@ const EducationPage = () => {
               <img src={img1} alt="img1" className="h-" />
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 Diamonds are evaluated according to four essential attributes,
-                first introduced by the Gemological Institute of America 
-                {/* (GIA) */}
-                .
-                Understanding these helps you make confident choices.
+                first introduced by the Gemological Institute of America
+                {/* (GIA) */}. Understanding these helps you make confident
+                choices.
               </p>
             </div>
 
@@ -738,8 +756,12 @@ const EducationPage = () => {
                   className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100"
                 >
                   <div className="text-center mb-6">
-                    <div className="w-16 h-16 bg-gradient-to-br from-[#9a8457]/20 to-[#b39968]/20 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-[#9a8457]/30">
-                      <Shapes className="w-8 h-8 text-[#9a8457]" />
+                    <div className="w-20 h-20  rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-[#9a8457]/30">
+                      <img
+                        src={shape.image}
+                        alt={shape.name}
+                        className="w-16 h-16 object-contain"
+                      />
                     </div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">
                       {shape.name}
@@ -1109,28 +1131,21 @@ const EducationPage = () => {
                   </div>
                 </div>
 
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/30">
-              {/* <svg
-                className="w-5 h-5 text-slate-400 flex-shrink-0"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-              </svg> */}
-              <a
-                href="https://wa.me/447867089659"
-                target="_blank"
-                rel="noopener noreferrer"
-                className=" text-white/90 "
-              >
-                <span className="hover:text-white font-medium text-sm">WhatsApp Support</span>
-                <br className="p-2" />{" "}
-                <span className="text-white text-md ">
-                  +44 7867089659
-                </span>{" "}
-              </a>
-            </div>
-
+               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/30">
+  <div>
+    <p className="font-medium text-sm text-white/90 mb-1">
+      WhatsApp Support
+    </p>
+    <a
+      href="https://wa.me/447867089659"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-white text-md hover:text-white/80 transition-colors"
+    >
+      +44 7867089659
+    </a>
+  </div>
+</div>
               </div>
             </div>
           </div>

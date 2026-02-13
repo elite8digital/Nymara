@@ -118,12 +118,12 @@ const EmailPopup = ({ onClose }: { onClose: () => void }) => {
   };
 
   const handleCall = () => {
-    window.location.href = "tel:+1234567890"; // Replace with your phone number
+    window.location.href = "tel:+447867089659"; // Replace with your phone number
   };
 
   const handleChat = () => {
     // Replace with your chat/WhatsApp link
-    window.open("https://wa.me/1234567890", "_blank");
+    window.open("https://wa.me/7867089659", "_blank");
   };
 
   return (
