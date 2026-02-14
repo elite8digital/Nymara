@@ -1169,7 +1169,7 @@ useEffect(() => {
       const updatedItems: CartItem[] = await Promise.all(
         cart.map(async (item) => {
           const { data } = await axios.get(
-            `${API_URL}/api/ornaments/${item._id}`,
+            `${API_URL}/api/user/ornaments/${item._id}`,
             {
               params: { currency: selectedCountry.currency },
             }
@@ -1678,3 +1678,4 @@ const origAmount = item.originalPrice ?? item.prices?.[currency]?.amount ?? item
 
 
   export default CartPage;
+
